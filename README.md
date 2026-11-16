@@ -134,6 +134,12 @@ npm run preview
 
 Five people on the Enterprise track: tech lead, UI/UX, graphic design, data and QA.
 
+| | Role | Links |
+|---|---|---|
+| **Maria** | Software developer | [LinkedIn](https://linkedin.com/in/malufmatos) · [GitHub](https://github.com/malufmatos) |
+| **Gabryel** | Illustrator & artist | [LinkedIn](https://www.linkedin.com/in/gabryel-batista-designer) · [Behance](https://www.behance.net/gabbatsart) |
+| **Benjamin** | Software developer | [LinkedIn](https://www.linkedin.com/in/benjamdev) · [Instagram](https://www.instagram.com/fatherofcode) · [Website](https://bendevsolutions.com) |
+
 ## Credits
 
 - Data: NASA EONET, NASA GIBS, NASA Earth Information Center, NASA Scientific Visualization Studio
