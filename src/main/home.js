@@ -80,3 +80,17 @@ const renderAll = () => {
 };
 renderAll();
 onLanguageChange(renderAll);
+
+// The demo video: nothing is asked of YouTube until the visitor presses play. The player then
+// takes the place of the still, from the address that sets no cookies before playback.
+const demo = document.getElementById("demo-video");
+demo?.querySelector("button")?.addEventListener("click", () => {
+  const frame = document.createElement("iframe");
+  frame.src = `https://www.youtube-nocookie.com/embed/${demo.dataset.video}?autoplay=1&rel=0`;
+  frame.title = "Vídeo demo do Earth Jukebox";
+  frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+  frame.allowFullscreen = true;
+  frame.className = "absolute inset-0 h-full w-full border-0";
+  demo.replaceChildren(frame);
+  frame.focus();
+});

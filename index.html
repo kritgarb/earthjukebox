@@ -95,6 +95,58 @@
         >
       </a>
 
+      <section class="mt-section" id="video" aria-labelledby="video-title">
+        <div
+          class="grid items-center gap-[clamp(24px,4vw,56px)] rounded-2xl border border-steel bg-navy-800 p-[clamp(20px,3vw,40px)] min-[900px]:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+        >
+          <div>
+            <p class="pb-3 font-prose text-[clamp(16px,1.6vw,22px)] font-bold text-brand-yellow">Vídeo demo</p>
+            <h2
+              id="video-title"
+              class="font-head text-[clamp(28px,3vw,44px)] font-bold leading-[1.15] text-white text-pretty"
+            >
+              Veja o Earth Jukebox em 30 segundos
+            </h2>
+            <p class="max-w-[46ch] pt-4 font-prose text-[clamp(16px,1.5vw,20px)] leading-[1.55] text-fog text-pretty">
+              O desafio, a nossa solução, os ritmos brasileiros e a experiência multissensorial, em um vídeo curto narrado em inglês, com legendas em inglês e português.
+            </p>
+            <a
+              class="mt-4 inline-block py-2.5 font-prose font-bold text-frost underline underline-offset-4 hover:text-brand-yellow"
+              href="https://youtu.be/BbSlhq3Ng_s"
+              target="_blank"
+              rel="noopener"
+              >Assistir no YouTube <span aria-hidden="true">↗</span></a
+            >
+          </div>
+          <div
+            class="relative aspect-video w-full overflow-hidden rounded-xl border border-steel bg-black"
+            id="demo-video"
+            data-video="BbSlhq3Ng_s"
+          >
+            <img
+              class="block h-full w-full object-cover"
+              src="/img/cards/demo-video.webp"
+              alt="Quadro do vídeo: a palavra maracatu sobre o globo dos relâmpagos, no computador e no celular"
+              width="1280"
+              height="720"
+              loading="lazy"
+            />
+            <button
+              class="group absolute inset-0 flex items-center justify-center bg-black/25 hover:bg-black/10 focus-visible:outline focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-[#ffd23f]"
+              type="button"
+              aria-label="Reproduzir o vídeo demo do Earth Jukebox"
+            >
+              <span
+                class="flex h-[clamp(64px,8vw,96px)] w-[clamp(64px,8vw,96px)] items-center justify-center rounded-full bg-brand-yellow text-deep-space shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-transform group-hover:scale-110"
+                aria-hidden="true"
+              >
+                <svg viewBox="0 0 24 24" width="44%" height="44%" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section
         class="mt-section"
         id="sobre"
@@ -431,6 +483,10 @@
           <div class="grid gap-1 font-prose text-[clamp(14px,1.4vw,18px)]">
             <p class="font-medium">Projeto desenvolvido pelo time ENTERPRISE para o NASA Space Apps 2026.</p>
             <a class="inline-block py-2.5 font-bold text-frost underline underline-offset-4 hover:text-brand-yellow" href="/docs.html">Leia a documentação técnica <span aria-hidden="true">↗</span></a>
+            <p class="flex flex-wrap gap-x-6 gap-y-1">
+              <a class="inline-block py-2.5 font-bold text-frost underline underline-offset-4 hover:text-brand-yellow" href="https://github.com/kritgarb/earthjukebox" target="_blank" rel="noopener">Código no GitHub <span aria-hidden="true">↗</span></a>
+              <a class="inline-block py-2.5 font-bold text-frost underline underline-offset-4 hover:text-brand-yellow" href="https://youtu.be/BbSlhq3Ng_s" target="_blank" rel="noopener">Vídeo demo no YouTube <span aria-hidden="true">↗</span></a>
+            </p>
           </div>
         </div>
         <a class="grid flex-none justify-items-center gap-2 max-[560px]:grid-flow-col max-[560px]:items-center max-[560px]:gap-3 font-prose text-sm font-medium text-mist no-underline hover:text-brand-yellow" href="#top" aria-label="Voltar ao topo">
