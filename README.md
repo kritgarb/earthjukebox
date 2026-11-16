@@ -257,7 +257,7 @@ npm run preview
 
 ## Team
 
-Five people on the Enterprise track.
+Four people on the Enterprise track.
 
 | | Role | Links |
 |---|---|---|
@@ -265,7 +265,6 @@ Five people on the Enterprise track.
 | **Maria** | Software developer | [LinkedIn](https://linkedin.com/in/malufmatos) · [GitHub](https://github.com/malufmatos) · [Website](https://malufmatos.dev) |
 | **Gabryel** | Graphic designer and illustrator | [LinkedIn](https://www.linkedin.com/in/gabryel-batista-designer) · [Behance](https://www.behance.net/gabbatsart) |
 | **Isabela Guedes** | UI/UX designer | [LinkedIn](https://www.linkedin.com/in/isabela-guedes-337b13212) · [Portfolio](https://faint-increase-3bb.notion.site/Isabela-Guedes-ux-ui-designer-portfolio-c6d300a1b784822788f0018bd56e6ea9) |
-| **Cassio** | Data analyst | |
 | **Vitória** | QA | |
 
 ## Use of AI
