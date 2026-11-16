@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a1128" />
+    <title>Dentro do Helene · Earth Jukebox</title>
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/accessibility.css" />
+    <link rel="stylesheet" href="/src/styles/pages/sintonize.css" />
+  </head>
+  <body id="top" class="page-sintonize is-intro">
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <div class="stage" id="stage" aria-hidden="true"></div>
+
+    <div class="reticle" id="reticle" aria-hidden="true" hidden>
+      <span class="reticle__ring"></span>
+      <span class="reticle__label" id="reticle-label">—</span>
+    </div>
+
+    <p class="eye-caption" id="eye-caption" hidden></p>
+
+    <div class="hud-top" aria-live="off">
+      <span class="hud-top__time mono" id="hud-time">—</span>
+      <span class="hud-top__chip" id="hud-sun">—</span>
+      <span class="hud-top__chip" id="hud-frame">—</span>
+    </div>
+
+    <main class="layout" id="conteudo" tabindex="-1">
+      <p class="visually-hidden">
+        Descrição da cena: um globo mostra o furacão Helene em setembro de 2024,
+        entrando no Golfo do México e subindo para o norte. O som acompanha o
+        vento sustentado: quanto mais forte, mais agudo o acorde e mais rápido o
+        andamento.
+      </p>
+      <aside class="hud hud--left" aria-label="Dados do evento">
+        <section data-tab="sobre" class="panel">
+          <p class="eyebrow">Furacão · EONET + GIBS</p>
+          <h2 class="page-title">Sintonize um fenômeno</h2>
+          <p class="panel__note">
+            A trajetória real do Helene, registrada ponto a ponto pela EONET,
+            controla o sintetizador e a tempestade que você vê. Viaje no tempo,
+            troque de câmera e entre no olho do furacão.
+          </p>
+        </section>
+
+        <section class="panel" id="event-panel" aria-labelledby="event-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="event-title">Carregando evento</h2>
+            <span class="status" id="event-status" data-state="loading"
+              >Consultando</span
+            >
+          </div>
+          <div class="wind">
+            <span class="readout__label">Vento sustentado</span>
+            <span class="wind__value"
+              ><span id="r-kts">—</span>
+              <span class="wind__unit">kt</span></span
+            >
+            <span class="wind__sub mono"><span id="r-kmh">—</span> km/h</span>
+          </div>
+          <div class="category" id="event-category">
+            <span class="category__code">—</span
+            ><span class="category__label">—</span>
+          </div>
+          <div class="scale" id="scale" aria-hidden="true"></div>
+          <div class="readouts">
+            <div class="readout">
+              <span class="readout__label">Latitude</span>
+              <span class="readout__value" id="r-lat">—</span>
+            </div>
+            <div class="readout">
+              <span class="readout__label">Longitude</span>
+              <span class="readout__value" id="r-lon">—</span>
+            </div>
+          </div>
+        </section>
+
+        <section
+          data-tab="ciencia"
+          class="panel"
+          aria-labelledby="science-title"
+        >
+          <div class="panel__head">
+            <h2 class="panel__title" id="science-title">Ciência ao vivo</h2>
+            <button
+              class="info-btn"
+              type="button"
+              data-info-for="science-info"
+              aria-expanded="false"
+              aria-controls="science-info"
+              aria-label="Como calculamos"
+            >
+              i
+            </button>
+          </div>
+          <div class="readouts" id="science"></div>
+          <div class="panel__note info-text" id="science-info" hidden>
+            <p>
+              Calculado a cada instante a partir do vento da EONET. Empurrão:
+              pressão dinâmica q = ½·ρ·v², com ρ = 1,15 kg/m³, expressa como o
+              peso que faria a mesma força em 1 m² de parede. Poder destrutivo:
+              a potência dissipada cresce com v³ (Emanuel, Nature, 2005); 1× é
+              um furacão recém-formado (64 kt).
+            </p>
+            <p>
+              Intensificação rápida é o critério do National Hurricane Center
+              dos EUA: o vento sustentado subir 30 kt ou mais em 24 horas. O
+              Helene cumpriu esse critério antes de tocar a Flórida.
+            </p>
+          </div>
+        </section>
+      </aside>
+
+      <div class="center"></div>
+
+      <aside class="hud hud--right" id="drawer" aria-label="Detalhes">
+        <section data-tab="musica" class="panel" aria-labelledby="accent-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="accent-title">Sotaque da música</h2>
+            <button
+              class="info-btn"
+              type="button"
+              data-info-for="accent-info"
+              aria-expanded="false"
+              aria-controls="accent-info"
+              aria-label="Sobre o sotaque da música"
+            >
+              i
+            </button>
+          </div>
+          <div class="segmented" role="group" aria-label="Sotaque da música">
+            <button
+              type="button"
+              data-accent="br"
+              aria-pressed="false"
+              title="Tecla B"
+            >
+              Brasileiro
+            </button>
+            <button
+              type="button"
+              data-accent="universal"
+              aria-pressed="false"
+              title="Tecla B"
+            >
+              Universal
+            </button>
+          </div>
+          <p class="panel__note" id="accent-why"></p>
+          <ul
+            class="band"
+            id="band"
+            aria-label="Instrumentos e o limiar em que cada um entra"
+          ></ul>
+          <div class="panel__note info-text" id="accent-info" hidden>
+            <p>
+              A regra é a mesma nos dois sotaques: a intensidade escolhe a nota
+              e o acorde, a velocidade escolhe o andamento. No sotaque
+              brasileiro, a intensidade também decide quem toca: cada
+              instrumento entra quando o dado cruza um limiar, então dá para
+              ouvir em que faixa o fenômeno está.
+            </p>
+            <p>
+              Os instrumentos são sintetizados no navegador: tambores, ferros e
+              foles são osciladores e ruído, em padrões rítmicos inspirados nos
+              gêneros, e tocados pelos dados. Por baixo toca uma música gravada,
+              feita no Suno, que você escolhe em "Música de fundo" (por padrão,
+              a do gênero), e por cima soam os sons gerados pelo evento; ela
+              segue o andamento dos dados.
+            </p>
+          </div>
+        </section>
+
+        <section data-tab="musica" class="panel">
+          <div class="panel__head">
+            <h2 class="panel__title">Dado para som</h2>
+            <span class="eyebrow" id="map-source">trajetória da EONET</span>
+          </div>
+          <ul id="mapping"></ul>
+          <canvas
+            class="scope"
+            id="scope"
+            role="img"
+            aria-label="Forma de onda do som gerado"
+          ></canvas>
+        </section>
+
+        <section data-tab="musica" class="panel">
+          <h2 class="panel__title">Teste de olhos fechados</h2>
+          <p class="panel__note">
+            Sem olhar para a tela: dá para distinguir a categoria 1 da categoria
+            5? Se der, o som está codificando o dado, não só decorando a cena.
+          </p>
+          <div class="btn-row">
+            <button class="btn" id="test-low" type="button" data-kts="70">
+              Categoria 1 · 70 kt
+            </button>
+            <button class="btn" id="test-high" type="button" data-kts="145">
+              Categoria 5 · 145 kt
+            </button>
+          </div>
+        </section>
+
+        <section data-tab="sobre" class="panel">
+          <div class="panel__head">
+            <h2 class="panel__title">Imagem de satélite</h2>
+            <button
+              class="info-btn"
+              id="gibs-info-btn"
+              data-info-for="gibs-info"
+              type="button"
+              aria-expanded="false"
+              aria-controls="gibs-info"
+              aria-label="Sobre a imagem de satélite"
+            >
+              i
+            </button>
+          </div>
+          <p class="panel__note info-text" id="gibs-info" hidden>
+            O chão da cena é a imagem real de satélite de cada dia entre 24 e
+            28/09/2024, com o olho do Helene no Golfo do México. A imagem
+            principal é do VIIRS (NOAA-20); onde ele não passou, as lacunas são
+            preenchidas com MODIS Aqua e Terra. O relevo das nuvens é estimado
+            pelo brilho de cada pixel. Os relâmpagos são ilustrativos: a
+            frequência deles acompanha o vento, não uma medição de raios.
+          </p>
+        </section>
+      </aside>
+
+      <div class="dock">
+        <div class="panel transport">
+          <button
+            class="btn btn--primary"
+            id="btn-sound"
+            type="button"
+            aria-pressed="false"
+          >
+            <span class="icon icon--sound" aria-hidden="true"></span
+            ><span class="btn__label">Ligar som</span>
+          </button>
+          <button class="btn" id="btn-play" type="button" aria-pressed="false">
+            <span class="icon icon--play" aria-hidden="true"></span
+            ><span class="btn__label">Tocar trajetória</span>
+          </button>
+          <div class="transport__track" id="track">
+            <div class="profile" id="profile" aria-hidden="true"></div>
+            <label class="visually-hidden" for="scrub"
+              >Momento da trajetória</label
+            >
+            <input
+              class="range"
+              id="scrub"
+              type="range"
+              min="0"
+              max="1000"
+              step="1"
+              value="0"
+            />
+            <div class="transport__ticks" id="ticks" aria-hidden="true"></div>
+          </div>
+          <div
+            class="segmented cameras"
+            id="cameras"
+            role="group"
+            aria-label="Câmera"
+          >
+            <button
+              type="button"
+              data-camera="orbit"
+              aria-pressed="false"
+              title="Tecla 1"
+            >
+              Órbita
+            </button>
+            <button
+              type="button"
+              data-camera="chase"
+              aria-pressed="false"
+              title="Tecla 2"
+            >
+              Perseguição
+            </button>
+            <button
+              type="button"
+              data-camera="eye"
+              aria-pressed="false"
+              title="Tecla 3"
+            >
+              Olho
+            </button>
+          </div>
+          <button
+            class="btn btn--ghost sheet-toggle"
+            id="btn-sheet"
+            type="button"
+            aria-expanded="false"
+            aria-controls="drawer"
+          >
+            <span class="btn__label">Detalhes</span
+            ><span class="sheet-toggle__chevron" aria-hidden="true"></span>
+          </button>
+          <button
+            class="btn btn--ghost"
+            id="btn-hud"
+            type="button"
+            aria-pressed="false"
+            title="Tecla H"
+          >
+            Ocultar painéis
+          </button>
+          <a class="btn btn--ghost dock__home" href="/">Fenômenos</a>
+        </div>
+      </div>
+    </main>
+
+    <section class="intro" id="intro" aria-labelledby="intro-title">
+      <header class="intro-header" aria-label="Cabeçalho do site">
+        <div data-site-header></div>
+      </header>
+      <div class="intro__content">
+        <p
+          class="font-head text-[clamp(14px,1.6vw,20px)] uppercase text-fog-2 pt-[clamp(0px,3.4vw,52px)] font-bold"
+        >
+          Earth Jukebox · Furacão
+        </p>
+        <h1
+          class="font-head text-[clamp(40px,8vw,88px)] font-bold leading-[1.1] text-white"
+        >
+          Dentro do Helene
+        </h1>
+        <p
+          class="font-prose font-medium text-[clamp(18px,2vw,24px)] sm:px-10"
+          id="intro-rule"
+          data-rule="Quanto mais forte o vento, mais aguda a nota."
+        >
+          Quanto mais forte o vento, mais aguda a nota.
+        </p>
+        <p
+          class="font-prose text-[clamp(14px,1.4vw,16px)] text-fog sm:px-[clamp(0px,10vw,180px)] font-normal"
+        >
+          24 a 28 de setembro de 2024 · trajetória da EONET e imagens de
+          satélite da GIBS
+        </p>
+        <div class="intro__progress" aria-live="polite">
+          <span class="intro__bar"><span id="intro-bar"></span></span>
+        </div>
+
+        <div class="intro__accent pt-8">
+          <span class="font-prose font-semibold text-base text-fog-2"
+            >Sotaque da música</span
+          >
+          <div class="segmented" role="group" aria-label="Sotaque da música">
+            <button type="button" data-accent="br" aria-pressed="false">
+              Brasileiro
+            </button>
+            <button type="button" data-accent="universal" aria-pressed="false">
+              Universal
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-wrap justify-center gap-3">
+          <button
+            class="rounded-full px-4 py-2.5 text-base font-semibold text-white bg-#121C3D border border-[#C5CCE0] focus:border-none focus:bg-navy-900 cursor-pointer"
+            type="button"
+            aria-pressed="false"
+          >
+            Narração: desligada
+          </button>
+          <button
+            class="rounded-full px-4 py-2.5 text-base font-semibold text-white bg-#121C3D border border-[#C5CCE0] focus:border-none focus:bg-navy-900 cursor-pointer"
+            type="button"
+            data-audio
+            aria-pressed="false"
+          >
+            Audio: mono
+          </button>
+          <button
+            class="rounded-full px-4 py-2.5 text-base font-semibold text-white bg-#121C3D border border-[#C5CCE0] focus:border-none focus:bg-navy-900 cursor-pointer"
+            type="button"
+            data-moviment
+            aria-pressed="false"
+          >
+            Pouco movimento
+          </button>
+          <!-- posso escolher masi de um dos botoes -->
+        </div>
+        <button
+          class="py-4 px-8 rounded-full mt-10 bg-brand-green text-xl font-bold font-head text-deep-space focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#ffd23f]"
+          id="btn-start"
+          type="button"
+          disabled
+        >
+          Entrar na tempestade →
+        </button>
+        <p class="pt-3 font-normal text-sm text-[#C5CCE0]">
+          Use fones de ouvido ou escolha áudio mono. <br />
+          O som só começa quando você decidir ouvir.
+        </p>
+        <dl class="keys">
+          <div>
+            <dt><kbd>Espaço</kbd></dt>
+            <dd>tocar ou pausar</dd>
+          </div>
+          <div>
+            <dt><kbd>←</kbd><kbd>→</kbd></dt>
+            <dd>1 hora</dd>
+          </div>
+          <div>
+            <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt>
+            <dd>câmeras</dd>
+          </div>
+          <div>
+            <dt><kbd>H</kbd></dt>
+            <dd>painéis</dd>
+          </div>
+          <div>
+            <dt><kbd>M</kbd></dt>
+            <dd>som</dd>
+          </div>
+          <div>
+            <dt><kbd>B</kbd></dt>
+            <dd>sotaque</dd>
+          </div>
+          <div>
+            <dt><kbd>N</kbd></dt>
+            <dd>narração</dd>
+          </div>
+        </dl>
+      </div>
+      <footer class="site-footer intro-footer">
+        <div>
+          <p>Projeto desenvolvido pelo time ENTERPRISE para o NASA Space Apps 2026.</p>
+          <a href="/docs.html">Leia a documentação técnica ↗</a>
+        </div>
+        <a class="back-top" href="#top" aria-label="Voltar ao topo"
+          >↑<span>Volte ao topo</span></a
+        >
+      </footer>
+    </section>
+
+    <a
+      class="phenomena-back"
+      href="/helene.html"
+      aria-label="Voltar para a página de fenômenos"
+    >
+      <span aria-hidden="true">←</span> Fenômenos
+    </a>
+
+    <script type="module" src="/src/main/helene.js"></script>
+    <script type="module" src="/src/components/site-header.js"></script>
+  </body>
+</html>

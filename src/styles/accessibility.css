@@ -1,0 +1,137 @@
+/* Preferências da barra de acessibilidade (src/components/site-header.js), que grava
+   data-reduced-motion no <html>. A barra e o header são estilizados com utilitários Tailwind
+   no próprio componente; aqui fica só o efeito da preferência. */
+
+/* Redução de movimento */
+html[data-reduced-motion="true"] *,
+html[data-reduced-motion="true"] *::before,
+html[data-reduced-motion="true"] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Link "Pular para o conteúdo": aparece só quando recebe o foco do teclado. */
+.skip {
+  position: absolute;
+  left: 16px;
+  top: -64px;
+  z-index: 1000;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #ffd23f;
+  color: #0b1020;
+  font-weight: 700;
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Mobile e tablet (até 1180px): menu hambúrguer e barra de acessibilidade compacta ------------------------ */
+.ej-menu-toggle .ej-menu-icon-close,
+.ej-menu-toggle[aria-expanded="true"] .ej-menu-icon-open {
+  display: none;
+}
+
+.ej-menu-toggle[aria-expanded="true"] .ej-menu-icon-close {
+  display: inline;
+}
+
+@media (max-width: 1180px) {
+  /* Cabeçalho em pílula: só o logo, o ícone de acessibilidade e o hambúrguer. */
+  [data-ej-header] {
+    padding: 10px 14px 10px 20px;
+    row-gap: 8px;
+    border-radius: 9999px;
+  }
+
+  [data-ej-header]:has(.ej-nav.is-open) {
+    border-radius: 28px;
+  }
+
+  .ej-wordmark {
+    display: none;
+  }
+
+  .ej-actions {
+    display: flex;
+  }
+
+  [data-ej-header] > a {
+    gap: 10px;
+    font-size: 16px;
+  }
+
+  [data-ej-header] > a img {
+    height: 44px;
+  }
+
+  .ej-menu-toggle {
+    display: inline-flex;
+  }
+
+  /* Fechada, a navegação some; aberta, vira uma lista em coluna. */
+  .ej-nav:not(.is-open) {
+    display: none;
+  }
+
+  .ej-nav.is-open {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(185, 197, 225, 0.25);
+  }
+
+  .ej-nav.is-open > a {
+    font-size: 16px;
+  }
+
+  /* O seletor de idioma não estica: a seta fica colada nele. */
+  .ej-nav.is-open > div:not(.ej-access-menu) {
+    align-self: flex-start;
+  }
+
+  /* Atalhos de teclado não servem no toque. */
+  .ej-access-menu {
+    display: none;
+  }
+
+  /* Barra de acessibilidade: recolhida, abre pelo ícone do header. */
+  [data-ej-a11y-bar]:not(.is-open) {
+    display: none;
+  }
+
+  /* Com ela recolhida, o espaço do `grid gap-3` do wrapper também some. */
+  [data-ej-a11y-bar] {
+    gap: 6px;
+    padding-inline: 12px;
+  }
+
+  [data-ej-a11y-bar] > span:first-child {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  [data-ej-a11y-bar] > button,
+  [data-ej-a11y-bar] > output {
+    min-height: 40px;
+    min-width: 40px;
+    padding-inline: 12px;
+    font-size: 12px;
+  }
+
+  [data-ej-a11y-bar] > output {
+    min-width: 48px;
+  }
+}

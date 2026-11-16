@@ -1,0 +1,10 @@
+{
+  "_note": "Músicas de fundo (feitas no Suno) que a pessoa escolhe e que tocam por baixo do som do fenômeno. Cada chave é uma faixa: 'file' é o arquivo nesta pasta, 'name' é o nome mostrado, 'bpm' é o andamento (ou 'beats', para loops curtos: 4 compassos de 4/4 = 16). 'band' diz a qual banda de sotaque a faixa acompanha na escolha automática (baiao, maracatu, samba, bossa); sem 'band', ela só toca quando escolhida. 'gain' (0 a 1) é o volume. Enquanto uma faixa toca, a seção rítmica sintetizada da banda fica em silêncio e os sons gerados pelo evento (acordes e melodia que seguem os dados, sinos, texturas) tocam por cima. Os andamentos foram estimados pela análise do áudio.",
+  "baiao": { "file": "baiao.m4a", "name": "Baião", "bpm": 99, "band": "baiao" },
+  "bossanova": { "file": "bossanova.mp3", "name": "Bossa nova", "bpm": 129, "band": "bossa" },
+  "bregafunk": { "file": "bregafunk.mp3", "name": "Brega-funk", "bpm": 130 },
+  "carimbo": { "file": "carimbo.mp3", "name": "Carimbó", "bpm": 114 },
+  "maracatu": { "file": "maracatu.m4a", "name": "Maracatu", "bpm": 98.5, "band": "maracatu" },
+  "samba": { "file": "samba.m4a", "name": "Samba", "bpm": 109, "band": "samba" },
+  "xote": { "file": "xote.mp3", "name": "Xote", "bpm": 80.5 }
+}

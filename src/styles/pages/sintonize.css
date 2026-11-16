@@ -1,0 +1,1173 @@
+/* Experience pages (Helene/A23a/Tonga): the HUD chrome around the 3D stage from stage.css —
+   top strip, reticle, intro screen, outro card, toasts, the accent picker and the phone sheet.
+   Linked as its own <link>, separate from main.css, so @apply needs its own pointer to the
+   theme. Converted throughout; only keyframes, masks, nth-child chains, color-mix and the
+   handful of env()/dvh layout rules that no utility reaches stay as plain declarations. */
+@reference "../main.css";
+
+.page-sintonize .stage {
+  @apply bg-space;
+}
+
+.page-sintonize .stage canvas {
+  cursor: grab;
+}
+
+.page-sintonize .stage canvas:active {
+  cursor: grabbing;
+}
+
+/* HUD panels fade out in cinema mode and while the intro is up. */
+.page-sintonize .hud,
+.page-sintonize .dock,
+.hud-top {
+  @apply transition-[opacity,transform] duration-400 ease-in-out;
+}
+
+.is-cinema .hud {
+  @apply pointer-events-none opacity-0;
+}
+
+.is-cinema .hud--left {
+  @apply -translate-x-6;
+}
+
+.is-cinema .hud--right {
+  @apply translate-x-6;
+}
+
+.is-intro .hud,
+.is-intro .dock,
+.is-intro .hud-top,
+.is-intro .reticle {
+  @apply pointer-events-none opacity-0;
+}
+
+/* Top strip: time, day/night, image source ---------------------- */
+.hud-top {
+  @apply pointer-events-none fixed top-[14px] left-1/2 z-2 flex flex-wrap items-center justify-center gap-2 -translate-x-1/2;
+  max-width: calc(100% - 2 * var(--spacing-gutter));
+}
+
+.hud-top__time {
+  @apply rounded-lg border border-line bg-[rgba(10,17,40,0.6)] px-3 py-[6px] text-[15px] tracking-[0.04em];
+}
+
+.hud-top__chip {
+  @apply whitespace-nowrap rounded-full border border-line bg-[rgba(10,17,40,0.6)] px-[10px] py-[5px] font-mono text-[11px] leading-none font-medium text-ink-2;
+}
+
+.hud-top__chip[data-sun="night"] {
+  @apply text-[#c9b8ff];
+  border-color: rgba(183, 156, 255, 0.45);
+}
+
+.hud-top__chip[data-sun="day"] {
+  @apply text-[#ffe27a];
+  border-color: rgba(255, 210, 63, 0.45);
+}
+
+/* Eye-mode caption ---------------------------------------------- */
+.eye-caption {
+  @apply pointer-events-none fixed left-1/2 bottom-[118px] z-2 -translate-x-1/2 rounded-full border border-line bg-[rgba(10,17,40,0.55)] px-[14px] py-2 text-center font-body text-[12.5px] leading-[1.4] font-medium text-ink;
+  max-width: min(640px, calc(100% - 2 * var(--spacing-gutter)));
+}
+
+.eye-caption[hidden],
+.is-intro .eye-caption {
+  @apply hidden;
+}
+
+/* Reticle over the eye ----------------------------------------- */
+.reticle {
+  @apply pointer-events-none fixed top-0 left-0 z-2;
+  will-change: transform;
+}
+
+.reticle[hidden] {
+  @apply hidden;
+}
+
+.reticle__ring {
+  @apply absolute -top-[26px] -left-[26px] h-[52px] w-[52px] rounded-full border-[1.5px] transition-[border-color] duration-400;
+  border-color: var(--cat-color, rgba(255, 255, 255, 0.85));
+  box-shadow: 0 0 14px
+    color-mix(in srgb, var(--cat-color, var(--color-ice)) 60%, transparent);
+  animation: reticle-spin 6s linear infinite;
+  mask: conic-gradient(
+    #000 0 20%,
+    transparent 20% 25%,
+    #000 25% 45%,
+    transparent 45% 50%,
+    #000 50% 70%,
+    transparent 70% 75%,
+    #000 75% 95%,
+    transparent 95%
+  );
+}
+
+.reticle__label {
+  @apply absolute -top-3 left-9 whitespace-nowrap rounded-md border border-l-[3px] border-line-strong bg-[rgba(10,17,40,0.72)] px-2 py-[3px] font-mono text-[11.5px] leading-[1.3] font-medium;
+  border-left-color: var(--cat-color, var(--color-line-strong));
+}
+
+@keyframes reticle-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dock --------------------------------------------------------- */
+.page-sintonize .dock {
+  @apply w-[min(1040px,100%)];
+}
+
+.cameras button {
+  @apply flex-none px-3;
+}
+
+.btn--ghost {
+  @apply bg-transparent;
+}
+
+/* Info toggle -------------------------------------------------- */
+.info-btn {
+  @apply grid h-[26px] w-[26px] place-items-center rounded-full border border-line-strong bg-transparent p-0 text-[13px] leading-none font-semibold text-ink-2 italic;
+  font-family: Georgia, "Times New Roman", serif;
+  cursor: pointer;
+}
+
+.info-btn:hover,
+.info-btn[aria-expanded="true"] {
+  @apply border-ice text-ice;
+}
+
+.info-text[hidden] {
+  @apply hidden;
+}
+
+.page-sintonize .btn-row .btn {
+  @apply flex-[1_1_140px];
+}
+
+.page-sintonize .is-testing {
+  @apply outline outline-storm outline-offset-2;
+}
+
+/* Intro -------------------------------------------------------- */
+.intro {
+  @apply fixed inset-0 z-40 grid place-items-center transition-opacity duration-[900ms] ease-in-out;
+  padding: 24px var(--spacing-gutter);
+  background:
+    radial-gradient(
+      ellipse 60% 55% at 50% 50%,
+      rgba(10, 17, 40, 0.72),
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse at 50% 60%,
+      rgba(10, 17, 40, 0.3),
+      rgba(10, 17, 40, 0.88) 70%
+    );
+}
+
+/* One shrinkable column: a wide header or long line must wrap, never push the page sideways. */
+.intro {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.intro > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.intro.is-leaving {
+  @apply pointer-events-none opacity-0;
+}
+
+.intro[hidden] {
+  @apply hidden;
+}
+
+.intro__content {
+  @apply grid w-full max-w-[760px] grid-cols-[minmax(0,1fr)] justify-items-center gap-[16px] text-center;
+  animation: intro-rise 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.intro__title {
+  @apply font-display text-[clamp(44px,6.4vw,92px)] leading-[0.92] font-extrabold tracking-[-0.035em];
+  text-shadow: 0 4px 40px rgba(10, 17, 40, 0.8);
+}
+
+/* The storm's name carries the intensity ramp used across the whole piece. */
+.intro__title em {
+  @apply not-italic text-inherit;
+}
+
+.intro__sub {
+  @apply max-w-[520px] text-base text-ink-2;
+  text-wrap: balance;
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.intro__progress {
+  @apply grid w-[min(144px,100%)] gap-2;
+}
+
+.intro__bar {
+  @apply h-[3px] overflow-hidden rounded-[2px] bg-[rgba(186,109,32,0.15)];
+}
+
+.intro__bar > span {
+  @apply block h-full w-0 bg-ice transition-[width] duration-300 ease-in-out;
+}
+
+.intro__status {
+  @apply text-xs text-ink-3;
+}
+
+.intro__start {
+  @apply min-h-[52px] px-7 text-base;
+}
+
+.intro__hint {
+  @apply text-[13px] text-ink-3;
+}
+
+.keys {
+  @apply mt-2 flex flex-wrap justify-center gap-x-[18px] gap-y-2 border-t border-line pt-[18px] text-[12.5px] text-ink-3;
+}
+
+.keys > div {
+  @apply flex items-center gap-[7px];
+}
+
+.keys dt {
+  @apply flex gap-[3px];
+}
+
+.keys dd {
+  @apply m-0;
+}
+
+kbd {
+  @apply inline-grid h-[22px] min-w-[22px] place-items-center rounded-[5px] border border-b-2 border-line-strong bg-[rgba(255,236,190,0.08)] px-[6px] font-mono text-[11px] leading-none font-medium text-ink;
+}
+
+@media (max-width: 1000px) {
+  .hud-top {
+    @apply absolute;
+  }
+
+  /* The stage is a 60vh block on top of the page here: keep the caption inside it. */
+  .eye-caption {
+    @apply absolute bottom-auto;
+    top: calc(max(60vh, 360px) - 64px);
+  }
+}
+
+/* Back to the chooser ------------------------------------------ */
+.intro__back {
+  @apply absolute top-5 font-body text-[13px] leading-none font-medium text-ink-2 no-underline;
+  left: var(--spacing-gutter);
+}
+
+.intro__back:hover {
+  @apply text-ink;
+}
+
+a.btn {
+  @apply no-underline;
+}
+
+/* Per-phenomenon accents on the intro title ---------------------- */
+.theme-ice .intro__title em {
+  @apply text-inherit;
+}
+
+.theme-fire .intro__title em {
+  @apply text-inherit;
+}
+
+.info-text {
+  @apply grid gap-2;
+}
+
+.readout--wide {
+  @apply col-span-full;
+}
+
+/* Remaining ice --------------------------------------------------- */
+.remain {
+  @apply h-[6px] overflow-hidden rounded-[3px] bg-[rgba(255,236,190,0.1)];
+}
+
+.remain > span {
+  @apply block h-full rounded-[3px] transition-[width,background] duration-[600ms] ease-in-out;
+  width: var(--remain, 100%);
+  background: var(--cat-color, var(--color-ice));
+}
+
+/* Calving list ---------------------------------------------------- */
+.calvings {
+  @apply grid list-none gap-[6px] m-0 p-0;
+}
+
+.calving {
+  @apply grid w-full gap-x-[10px] gap-y-[6px] rounded-brand-sm border border-line bg-[rgba(255,236,190,0.05)] px-[10px] py-2 text-left text-xs transition-[border-color,background] duration-150;
+  grid-template-columns: 1fr auto;
+  cursor: pointer;
+}
+
+.calving:hover {
+  @apply border-ice;
+}
+
+.calving__date {
+  @apply text-ink-2;
+}
+
+.calving__lost {
+  @apply text-storm;
+}
+
+.calving__bar {
+  @apply col-span-full h-[3px] rounded-[2px];
+  background: linear-gradient(
+    90deg,
+    var(--color-storm) var(--lost),
+    rgba(255, 236, 190, 0.12) var(--lost)
+  );
+}
+
+.calving.is-past {
+  @apply bg-[rgba(255,122,26,0.08)];
+  border-color: rgba(255, 122, 26, 0.35);
+}
+
+/* Event announcement ---------------------------------------------- */
+.toast {
+  @apply pointer-events-none fixed top-16 left-1/2 z-5 m-0 -translate-x-1/2 -translate-y-2 rounded-[10px] border border-storm bg-[rgba(10,17,40,0.78)] px-4 py-[10px] text-center font-body text-[13px] leading-[1.4] font-medium opacity-0 transition-[opacity,transform] duration-[350ms] ease-in-out;
+  max-width: min(560px, calc(100% - 2 * var(--spacing-gutter)));
+}
+
+.toast.is-on {
+  @apply translate-y-0 opacity-100;
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  /* Top strip: one compact line. */
+  .hud-top {
+    @apply fixed flex-nowrap gap-[6px];
+    top: max(8px, env(safe-area-inset-top));
+  }
+
+  .hud-top__time {
+    @apply whitespace-nowrap px-[9px] py-[5px] text-xs;
+  }
+
+  .hud-top__chip {
+    @apply px-2 py-[5px] text-[10px];
+  }
+
+  #hud-frame {
+    @apply hidden;
+  }
+
+  .eye-caption {
+    @apply fixed top-[52px] bottom-auto rounded-[10px] text-xs;
+  }
+
+  .toast {
+    @apply top-[52px] text-xs;
+  }
+
+  .reticle__ring {
+    @apply -top-5 -left-5 h-10 w-10;
+  }
+
+  .reticle__label {
+    @apply left-7 text-[10.5px];
+  }
+
+  /* Intro: back link in the flow, no keyboard shortcuts on a touch screen. */
+  .intro {
+    @apply content-start overflow-y-auto pt-4;
+  }
+
+  .intro__back {
+    @apply static mb-7 justify-self-start;
+  }
+
+  .intro__content {
+    @apply gap-[14px];
+  }
+
+  .intro__title {
+    @apply text-[clamp(38px,12vw,56px)];
+  }
+
+  .intro__sub {
+    @apply text-[14.5px];
+  }
+
+  .keys {
+    @apply hidden;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .keys {
+    @apply hidden;
+  }
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  /* With the sheet open the scene is mostly covered: no reticle floating over the panels. */
+  .is-sheet .reticle,
+  .is-sheet .eye-caption {
+    @apply hidden;
+  }
+}
+
+/* Accent of the music: picker, band chips, narrator ----------------- */
+.intro__accent {
+  @apply grid w-full max-w-[550px] justify-items-center gap-2;
+}
+
+.intro__accent .segmented {
+  @apply w-full max-w-126;
+}
+
+.intro__accent .segmented button {
+  @apply min-h-[64px] bg-[#121C3D] px-3 text-[16px] max-[520px]:min-h-14 max-[520px]:text-[15px];
+}
+
+.segmented button[data-accent] {
+  @apply min-h-13 whitespace-nowrap;
+}
+
+/* The Brazilian accent wears the flag's yellow when it is on (Figma: #ffd33f on deep space). */
+.segmented button[aria-pressed="true"] {
+  background: var(--color-brand-yellow);
+  color: var(--color-deep-space);
+}
+
+.band {
+  @apply flex list-none flex-wrap gap-[6px] m-0 p-0;
+}
+
+.band__chip {
+  @apply inline-flex items-baseline gap-[6px] rounded-full border border-line px-[9px] py-[5px] font-mono text-[11.5px] leading-[1.2] font-medium text-ink-3 transition-[color,border-color,background,box-shadow] duration-300;
+}
+
+.band__chip small {
+  @apply text-[9.5px] tracking-[0.04em] opacity-75;
+}
+
+.band__chip.is-on {
+  @apply text-[#ffe9b0] shadow-[0_0_12px_rgba(255,210,63,0.18)];
+  background: rgba(255, 210, 63, 0.12);
+  border-color: rgba(255, 210, 63, 0.65);
+}
+
+[data-accent="universal"] .band__chip.is-on {
+  @apply border-ice text-ink shadow-none;
+  background: rgba(255, 210, 63, 0.12);
+}
+
+#btn-narrator {
+  @apply justify-self-start;
+}
+
+#btn-narrator[aria-pressed="true"] {
+  background: var(--color-navy-800);
+  @apply border-navy-800 text-white;
+}
+
+/* Live science readouts -------------------------------------------- */
+.readout__note {
+  @apply font-body text-[11px] leading-[1.35] font-normal text-ink-3;
+  text-wrap: pretty;
+}
+
+.readout.is-alert {
+  @apply border-heat bg-[rgba(255,46,126,0.1)];
+}
+
+.readout.is-alert .readout__note {
+  @apply font-semibold tracking-[0.03em] text-[#ffb3d1];
+}
+
+#science .readout__value {
+  @apply text-[19px];
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .band__chip {
+    @apply transition-none;
+  }
+}
+
+/* ================================================================ Brazilian skin */
+.hud-top__time,
+.hud-top__chip,
+.reticle__label,
+.eye-caption,
+.toast {
+  @apply rounded-full font-body;
+}
+
+.hud-top__time {
+  @apply font-bold tracking-normal;
+}
+
+.hud-top__chip {
+  @apply text-xs font-semibold;
+}
+
+.hud-top__chip[data-sun="night"] {
+  @apply text-[#d8c9ff];
+  border-color: rgba(183, 156, 255, 0.5);
+}
+
+.reticle__label {
+  @apply border-l font-semibold;
+}
+
+.toast {
+  @apply top-[62px] bg-ipe border-ipe text-night-ink text-sm font-bold px-5 py-[11px] shadow-[0_14px_36px_-14px_rgba(255,210,63,0.7)];
+}
+
+/* Intro: the phenomenon's name as a poster, over the promenade wave. */
+.intro {
+  background:
+    radial-gradient(
+      ellipse 60% 55% at 50% 50%,
+      rgba(10, 17, 40, 0.78),
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse at 50% 60%,
+      rgba(10, 17, 40, 0.35),
+      rgba(10, 17, 40, 0.92) 70%
+    );
+}
+
+.intro__title {
+  @apply font-display text-[clamp(48px,7.4vw,112px)] leading-[0.86] font-extrabold tracking-[-0.045em] text-white;
+}
+
+.theme-ice .intro__title,
+.theme-fire .intro__title {
+  @apply text-white;
+}
+
+.intro__sub {
+  @apply text-[17px];
+}
+
+.intro__status {
+  @apply font-body text-[13px];
+}
+
+.intro__bar {
+  @apply h-[6px] rounded-full;
+}
+
+.intro__bar > span {
+  @apply rounded-full;
+  background: var(--color-brand-green);
+}
+
+.intro__start {
+  @apply min-h-[58px] px-[34px] text-lg font-bold;
+}
+
+/* Mesmas cores do botão da Home: verde da marca com texto azul-espacial. */
+.btn--primary.intro__start {
+  border-color: var(--color-brand-green);
+  background: var(--color-brand-green);
+  color: var(--color-deep-space);
+}
+
+.btn--primary.intro__start:hover:not(:disabled) {
+  border-color: var(--color-brand-green);
+  background: var(--color-brand-green);
+  filter: brightness(1.1);
+}
+
+.intro__back {
+  @apply text-sm font-semibold;
+}
+
+kbd {
+  @apply rounded-lg font-mono;
+}
+
+.info-btn {
+  @apply font-body text-sm font-bold;
+}
+
+.info-btn:hover,
+.info-btn[aria-expanded="true"] {
+  @apply border-ipe bg-ipe text-night-ink;
+}
+
+.calving {
+  @apply font-body text-[13px];
+}
+
+.calving:hover {
+  @apply border-ipe;
+}
+
+/* The band: each instrument wears its own ribbon colour once it is playing. */
+.segmented button[data-accent="br"][aria-pressed="true"] {
+  @apply border-transparent text-night-ink;
+  background: linear-gradient(100deg, #ddd4ff);
+}
+
+.band__chip {
+  @apply border-[1.5px] border-dashed border-line-strong px-3 py-[6px] font-body text-[12.5px] leading-[1.2] font-semibold;
+  --ribbon: var(--color-ipe);
+}
+
+.band__chip:nth-child(5n + 2) {
+  --ribbon: var(--color-mata);
+}
+.band__chip:nth-child(5n + 3) {
+  --ribbon: var(--color-urucum);
+}
+.band__chip:nth-child(5n + 4) {
+  --ribbon: var(--color-mar);
+}
+.band__chip:nth-child(5n + 5) {
+  --ribbon: var(--color-bougainvillea);
+}
+
+.band__chip small {
+  @apply font-mono text-[10.5px] leading-none font-semibold tracking-normal;
+}
+
+.band__chip.is-on,
+[data-accent="universal"] .band__chip.is-on {
+  @apply border-[1.5px] text-night-ink shadow-none;
+  background: var(--ribbon);
+  border-color: var(--ribbon);
+}
+
+.band__chip:nth-child(5n + 5).is-on {
+  @apply text-white;
+}
+
+#btn-narrator[aria-pressed="true"] {
+  @apply border-mata bg-mata text-night-ink;
+}
+
+.readout__note {
+  @apply text-xs;
+}
+
+.readout.is-alert {
+  @apply border-bougainvillea bg-bougainvillea;
+}
+
+.readout.is-alert .readout__label,
+.readout.is-alert .readout__unit,
+.readout.is-alert .readout__note {
+  @apply tracking-normal text-white;
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  .toast {
+    @apply top-[50px] rounded-[18px] text-[13px];
+  }
+
+  .intro__title {
+    @apply text-[clamp(44px,14vw,64px)];
+  }
+}
+
+/* ================================================================ One thing at a time
+   By default the screen shows the scene, one card (what is happening and who is playing) and the
+   transport. The rest is a drawer with three tabs, opened with "Detalhes". */
+.sheet-toggle {
+  @apply inline-flex;
+}
+
+#btn-hud {
+  @apply hidden;
+}
+
+.hud--right {
+  @apply hidden;
+}
+
+.is-sheet .hud--right {
+  @apply flex;
+}
+
+.tabs {
+  @apply static z-auto flex-shrink-0 border border-line bg-glass-strong;
+}
+
+.tabs button {
+  @apply min-h-10 text-sm;
+}
+
+.hud--right[data-active="musica"] > .panel:not([data-tab="musica"]),
+.hud--right[data-active="ciencia"] > .panel:not([data-tab="ciencia"]),
+.hud--right[data-active="sobre"] > .panel:not([data-tab="sobre"]) {
+  @apply hidden;
+}
+
+/* The card: the measurement, its scale and the band. Coordinates and the like wait in the drawer. */
+body:not(.is-sheet) #event-panel .readouts,
+body:not(.is-sheet) #hud-frame {
+  @apply hidden;
+}
+
+.now-band {
+  @apply mt-1 border-t border-dashed border-line-strong pt-3 font-display text-[15px] leading-[1.2] font-bold text-ink;
+}
+
+#event-panel .band {
+  @apply gap-[5px];
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  /* In the phone's sheet the card comes first, then the tabs. */
+  .is-sheet .hud--left {
+    @apply order-1;
+  }
+
+  .is-sheet .hud--right {
+    @apply order-2;
+  }
+
+  .tabs {
+    @apply static;
+  }
+}
+
+/* ================================================================ The rule and the ending
+   The intro says the rule in one sentence before anything plays; the ending says what was heard. */
+.intro__rule {
+  @apply max-w-[26em] font-body text-[clamp(18px,1.7vw,22px)] leading-[1.35] font-semibold text-ink;
+  text-wrap: balance;
+}
+
+.intro__sub {
+  @apply text-[14.5px] text-ink-3;
+}
+
+.outro {
+  @apply fixed left-1/2 top-[46%] z-6 grid w-[min(560px,calc(100%-2*var(--spacing-gutter)))] -translate-x-1/2 -translate-y-1/2 gap-[14px] rounded-[34px_22px_38px_24px] border border-line-strong bg-glass-strong p-[clamp(22px,3vw,34px)] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)];
+  animation: outro-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.outro[hidden] {
+  @apply hidden;
+}
+
+.outro__title {
+  @apply font-display text-[clamp(26px,3.2vw,40px)] leading-[0.98] font-extrabold tracking-[-0.035em] text-ipe;
+}
+
+.theme-ice .outro__title {
+  @apply text-mar;
+}
+
+.theme-fire .outro__title {
+  @apply text-urucum;
+}
+
+.outro__text {
+  @apply max-w-[34em] text-base leading-[1.5] text-ink-2;
+  text-wrap: pretty;
+}
+
+.outro__actions {
+  @apply mt-1 flex flex-wrap gap-[10px];
+}
+
+.outro__actions .btn {
+  @apply min-h-[46px];
+}
+
+/* The card that told the story steps back while the ending speaks. */
+.is-ended .hud--left,
+.is-ended .reticle {
+  @apply pointer-events-none opacity-0;
+}
+
+@keyframes outro-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 16px));
+  }
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  .intro__rule {
+    @apply text-[17px];
+  }
+
+  .outro {
+    @apply top-[40%];
+  }
+
+  .outro__actions .btn {
+    @apply flex-[1_1_100%];
+  }
+}
+
+/* ================================================================ Phones
+   The default view keeps the argument: one line above the transport with the measurement and
+   the band. Announcements use the width of the screen, the sheet is opaque where it must be
+   read, and everything touchable is at least 44 px. */
+.now-strip {
+  @apply hidden;
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  .now-strip {
+    @apply mx-1 mb-2 flex items-center gap-[10px] rounded-full border border-line bg-glass-strong px-[14px] py-[9px] font-body text-[13.5px] leading-[1.2] font-medium text-ink-2;
+  }
+
+  /* With the sheet open the card says the same thing in full. */
+  .is-sheet .now-strip {
+    @apply hidden;
+  }
+
+  .now-strip__value {
+    @apply whitespace-nowrap font-display text-base font-extrabold tracking-[-0.01em] text-ink;
+  }
+
+  .now-strip__dots {
+    @apply ml-auto flex gap-1;
+  }
+
+  .now-strip__dots i {
+    @apply h-[9px] w-[9px] rounded-full border-[1.5px] border-line-strong transition-[background,border-color] duration-300;
+  }
+
+  .now-strip__dots i.is-on {
+    @apply border-ipe bg-ipe;
+  }
+
+  .now-strip__dots i:nth-child(5n + 2).is-on {
+    @apply border-mata bg-mata;
+  }
+  .now-strip__dots i:nth-child(5n + 3).is-on {
+    @apply border-urucum bg-urucum;
+  }
+  .now-strip__dots i:nth-child(5n + 4).is-on {
+    @apply border-mar bg-mar;
+  }
+  .now-strip__dots i:nth-child(5n + 5).is-on {
+    @apply border-bougainvillea bg-bougainvillea;
+  }
+
+  .now-strip__band {
+    @apply whitespace-nowrap;
+  }
+
+  /* The label on the scene would repeat the strip. */
+  body:not(.is-sheet) .reticle__label {
+    @apply hidden;
+  }
+
+  /* Announcements: the full width between the gutters, so a sentence stays on one or two lines. */
+  .toast {
+    @apply left-3 right-3 max-w-none translate-x-0 -translate-y-2 px-4 py-[10px] text-sm leading-[1.35];
+  }
+
+  .toast.is-on {
+    @apply translate-y-0;
+  }
+
+  /* The sheet: a solid floor under the text, and a transport nothing shows through. */
+  .is-sheet .layout {
+    @apply max-h-[72dvh];
+    background: linear-gradient(180deg, transparent, var(--color-space) 56px);
+  }
+
+  .is-sheet .dock > .panel {
+    @apply bg-space-2;
+  }
+
+  /* The intro: the back link is a real target, and the start button sits where the thumb is. */
+  .intro {
+    grid-template-rows: auto 1fr;
+  }
+
+  .intro__back {
+    @apply mb-0 inline-flex min-h-[44px] items-center pr-3;
+  }
+
+  .intro__content {
+    @apply self-center pb-14;
+  }
+
+  .transport .cameras button,
+  .sheet-toggle,
+  .tabs button {
+    @apply min-h-[44px] text-xs;
+  }
+}
+
+/* Touch: targets of at least 44 px even where the drawing is smaller. */
+@media (pointer: coarse) {
+  .info-btn {
+    @apply relative;
+  }
+
+  .info-btn::after {
+    content: "";
+    @apply absolute -inset-[9px];
+  }
+
+  .transport__track .range {
+    @apply -mb-[11px] -mt-[22px] h-11;
+  }
+
+  .calving {
+    @apply min-h-[44px];
+  }
+}
+
+/* A phone on its side: the intro scrolls, so the wave would cross the text. */
+@media (max-height: 520px) {
+  .intro__content {
+    @apply pb-4;
+  }
+}
+
+/* ================================================================ Without the screen */
+.intro__status.is-error {
+  @apply text-[15px] leading-[1.4] text-ink;
+}
+
+/* Keyboard focus is always visible, including on the dark scene. */
+:focus-visible {
+  @apply outline outline-[3px] outline-ipe outline-offset-[3px];
+}
+
+.btn--primary:focus-visible,
+.segmented button[aria-pressed="true"]:focus-visible {
+  @apply outline-ink;
+}
+
+/* ================================================================ Transport on one line
+   Playback only: the way back moved above the card. The eye caption sits above the transport
+   whatever its height, and the labels of the chart are readable. */
+.back-link {
+  @apply inline-flex min-h-9 items-center self-start rounded-full border border-line bg-glass px-[14px] font-body text-[13px] leading-none font-semibold text-ink-2 no-underline;
+}
+
+.back-link:hover {
+  @apply border-ipe text-ink;
+}
+
+@media (min-width: 761px) and (min-height: 521px) {
+  .dock__home {
+    @apply hidden;
+  }
+
+  .transport {
+    @apply flex-nowrap;
+  }
+
+  .transport__track {
+    @apply flex-[1_1_420px];
+  }
+
+  .transport .btn,
+  .transport .cameras {
+    @apply flex-shrink-0;
+  }
+}
+
+@media (min-width: 1001px) and (min-height: 521px) {
+  .eye-caption {
+    bottom: calc(var(--dock-h, 96px) + 36px);
+  }
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  .back-link {
+    @apply hidden;
+  }
+}
+
+/* Sound on is the normal state, not a second call to action beside "Pausar". */
+#btn-sound[aria-pressed="true"] {
+  @apply border-line-strong bg-[rgba(255,236,190,0.08)] text-ink;
+}
+
+/* Chart labels: above the drawn profile, and large enough to read. */
+.profile__threshold,
+.profile__peak,
+.profile__marker {
+  @apply z-1;
+}
+
+.profile__threshold span,
+.profile__peak span,
+.profile__marker span,
+.transport__ticks {
+  @apply text-[11.5px];
+}
+
+.profile__threshold span {
+  @apply text-ink-2;
+}
+
+.profile__peak span,
+.profile__marker span {
+  @apply text-ink;
+}
+
+/* Small codes on the scale and on the band: readable before they light up. */
+.scale__seg {
+  @apply text-[10.5px];
+  color: color-mix(in srgb, var(--seg-color) 45%, var(--color-ink));
+}
+
+.band__chip {
+  @apply text-ink-2;
+}
+
+.band__chip small {
+  @apply opacity-100;
+}
+
+/* ================================================================ Fixes after the second critique */
+/* Hidden panels (key H) always leave the way back on screen. */
+.cinema-chip {
+  @apply fixed top-[14px] z-4 hidden min-h-10 gap-2 bg-glass-strong;
+  left: var(--spacing-gutter);
+}
+
+.is-cinema .cinema-chip {
+  @apply inline-flex;
+}
+
+.is-intro .cinema-chip {
+  @apply hidden;
+}
+
+/* Dark ink on every ribbon and on the alert: white on the pink was 3.5:1. */
+.band__chip:nth-child(5n + 5).is-on {
+  @apply text-night-ink;
+}
+
+.readout.is-alert .readout__label,
+.readout.is-alert .readout__value,
+.readout.is-alert .readout__unit,
+.readout.is-alert .readout__note {
+  @apply text-night-ink;
+}
+
+/* The label on the scene passes under the panels instead of over them. */
+.reticle {
+  @apply z-0;
+}
+
+/* "· furacão" is part of the threshold label, not a second label on the same spot. */
+.profile__threshold span span {
+  @apply static;
+}
+/* Introdução em três faixas: cabeçalho, conteúdo e rodapé sem sobreposição. */
+.page-sintonize .intro {
+  @apply fixed inset-0 z-40 grid grid-rows-[auto_minmax(min-content,1fr)_auto]
+    justify-items-center gap-4 overflow-x-hidden overflow-y-auto;
+
+  align-items: stretch;
+  padding: clamp(16px, 2.5vh, 28px) var(--spacing-gutter);
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page-sintonize .intro-header {
+  @apply relative z-50 mx-auto w-full max-w-[1600px];
+}
+
+.page-sintonize .intro-header [data-site-header] {
+  @apply w-full;
+}
+
+.page-sintonize .intro__content {
+  @apply relative z-1 w-full max-w-[760px] justify-self-center self-center gap-[14px] py-3;
+}
+
+.page-sintonize .intro__title {
+  @apply text-[clamp(44px,6vw,76px)];
+}
+
+.page-sintonize .intro-footer {
+  @apply relative z-50 mx-auto flex w-full max-w-[1600px] items-center justify-between gap-5 border-t border-line pt-5;
+  margin-block: 0;
+}
+
+.page-sintonize .intro-footer > div {
+  @apply grid gap-[6px];
+}
+
+/* Escondido: apontava para a própria página e ficava em cima do botão "← Eventos", que já
+   leva de volta aos fenômenos. */
+.page-sintonize .phenomena-back {
+  @apply hidden;
+}
+
+@media (max-width: 760px) {
+  .page-sintonize .intro {
+    @apply gap-3;
+    padding: max(12px, env(safe-area-inset-top)) 14px
+      max(14px, env(safe-area-inset-bottom));
+  }
+
+  .page-sintonize .intro-header {
+    @apply w-full;
+  }
+
+  .page-sintonize .intro__content {
+    @apply self-start py-2;
+  }
+
+  .page-sintonize .intro-footer {
+    @apply flex-col items-start gap-3 pt-4;
+  }
+}
+
+/* Choice of the background music, on the intro and in the sound panel ---------------------- */
+.backing {
+  @apply mt-3 grid w-full gap-1 text-left font-body text-[13px] font-semibold text-fog-2;
+}
+
+.intro__accent .backing {
+  @apply max-w-[320px] text-center;
+}
+
+.backing__select {
+  @apply min-h-11 w-full rounded-lg border border-line-strong bg-glass-strong px-3 font-body text-[14px] font-medium text-ink;
+  color-scheme: dark;
+}
+
+.backing__select option {
+  background: var(--color-space-2);
+  color: var(--color-ink);
+}
+
+.backing__select:focus-visible {
+  outline: 3px solid var(--color-ice);
+  outline-offset: 2px;
+}

@@ -1,0 +1,326 @@
+/* Immersive layout: a full-viewport scene with glass HUD panels on top.
+   @imported into main.css, so it shares that file's Tailwind context (no @reference needed).
+   Converted to @apply; grid-template-areas, container queries and the handful of effects no
+   utility reaches (radial gradient, env() safe area, clip/rect) stay as plain declarations. */
+.stage {
+  @apply fixed inset-0 z-0 overflow-hidden;
+  background: radial-gradient(
+    ellipse at 50% 42%,
+    var(--color-navy-800) 0%,
+    var(--color-space) 68%
+  );
+}
+
+.stage canvas {
+  @apply block;
+}
+
+.layout {
+  @apply relative z-1 grid gap-4 pointer-events-none;
+  height: calc(100dvh / var(--ui-zoom, 1));
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr) minmax(
+      280px,
+      340px
+    );
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "left center right"
+    "dock dock dock";
+  padding: 16px var(--spacing-gutter);
+}
+
+.hud {
+  @apply pointer-events-auto flex min-h-0 flex-col gap-3 overflow-y-auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
+.hud > * {
+  @apply flex-shrink-0;
+}
+
+.hud--left {
+  grid-area: left;
+}
+
+.hud--right {
+  grid-area: right;
+}
+
+.center {
+  @apply pointer-events-none min-h-0;
+  grid-area: center;
+}
+
+.dock {
+  @apply pointer-events-auto w-[min(820px,100%)] justify-self-center;
+  grid-area: dock;
+}
+
+.transport {
+  @apply flex flex-wrap items-center gap-x-4 gap-y-3;
+}
+
+.transport__track {
+  @apply grid min-w-0 flex-[1_1_260px];
+  container-type: inline-size;
+}
+
+/* On a narrow track the threshold label shrinks so it never meets the peak label. */
+@container (max-width: 520px) {
+  .profile__long {
+    @apply hidden;
+  }
+}
+
+.transport__track .range {
+  @apply relative -mt-[11px];
+}
+
+/* Wind profile behind the scrubber ------------------------------ */
+.profile {
+  @apply relative h-10;
+}
+
+.profile:empty {
+  @apply hidden;
+}
+
+.profile__layer {
+  @apply absolute inset-0 h-full w-full overflow-visible;
+}
+
+.profile__area {
+  @apply opacity-28;
+}
+
+.profile__line {
+  @apply fill-none stroke-[1.5];
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.profile__layer--ghost {
+  @apply opacity-35 saturate-20;
+}
+
+.profile__layer--live {
+  clip-path: inset(-4px calc(100% - var(--fill, 0%)) -4px 0);
+}
+
+.profile__threshold {
+  @apply absolute left-0 right-0 border-t border-dashed border-[rgba(255,236,190,0.22)];
+}
+
+.profile__threshold span {
+  @apply absolute left-0 bottom-0.5 font-mono text-[9.5px] leading-none tracking-[0.04em] text-ink-3 font-medium;
+}
+
+.profile__peak {
+  @apply absolute h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-heat shadow-[0_0_0_3px_rgba(255,46,126,0.22)];
+}
+
+.profile__peak span {
+  @apply absolute top-1/2 right-3 -translate-y-1/2 whitespace-nowrap font-mono text-[10px] leading-none text-[#ffb3d1] font-medium;
+}
+
+.transport__ticks {
+  @apply relative h-[14px] font-mono text-[10.5px] leading-none text-ink-3 font-normal;
+}
+
+.transport__ticks span {
+  @apply absolute top-0 -translate-x-1/2 whitespace-nowrap;
+}
+.transport__ticks span:first-child {
+  translate: 0 0;
+  transform: translateX(0);
+}
+
+.transport__ticks span:last-child {
+  translate: -100% 0;
+  transform: translateX(-100%);
+} 
+
+
+.transport__now {
+  @apply whitespace-nowrap font-mono text-xs leading-[1.2] text-ink-2 font-medium;
+}
+
+@media (max-width: 1000px) {
+  .stage {
+    @apply relative h-[60vh] min-h-[360px];
+  }
+
+  .layout {
+    @apply h-auto pt-4 pointer-events-auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      "dock"
+      "center"
+      "left"
+      "right";
+  }
+
+  .hud {
+    @apply overflow-visible;
+  }
+
+  .center:empty {
+    @apply hidden;
+  }
+}
+
+.profile__peak--right span {
+  @apply left-3;
+  right: auto;
+}
+
+.profile__marker {
+  @apply absolute top-0 bottom-0 border-l border-heat;
+}
+
+.profile__marker span {
+  @apply absolute -top-0.5 left-1.5 whitespace-nowrap font-mono text-[10px] leading-none text-[#ffb3d1] font-medium;
+}
+
+.profile__threshold--right span {
+  @apply right-0;
+  left: auto;
+}
+
+/* Phones: full-screen scene, a compact transport at the bottom and the panels in a sheet. -- */
+.sheet-toggle {
+  @apply hidden;
+}
+
+@media (max-width: 760px), (max-height: 520px) {
+  .stage {
+    @apply fixed inset-0 h-auto min-h-0;
+  }
+
+  .layout {
+    @apply pointer-events-auto fixed left-0 right-0 bottom-0 flex h-auto flex-col gap-[10px] overflow-y-auto;
+    max-height: calc(100dvh / var(--ui-zoom, 1));
+    padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+  }
+
+  .center,
+  .hud {
+    @apply hidden;
+  }
+
+  .dock {
+    @apply order-[-1] w-full;
+  }
+
+  .is-sheet .layout {
+    padding-top: 0;
+    max-height: calc(78dvh / var(--ui-zoom, 1));
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(10, 17, 40, 0.82) 60px
+    );
+  }
+
+  /* Panels keep their height and the sheet scrolls, with the transport pinned on top. */
+  .is-sheet .hud {
+    @apply flex flex-shrink-0 overflow-visible;
+  }
+
+  /* The pinned transport carries its own top gap and a solid backdrop, so panels scrolling
+     underneath never show above or beside it. */
+  .is-sheet .dock {
+    @apply sticky top-0 z-2 flex-shrink-0 pt-[10px];
+    background: linear-gradient(
+      180deg,
+      rgba(10, 17, 40, 0.96) 85%,
+      transparent
+    );
+    padding-bottom: 6px;
+  }
+
+  /* Transport: sound and play as icons beside the timeline, cameras below. */
+  .transport {
+    @apply gap-2 p-[10px];
+  }
+
+  .transport > #btn-sound,
+  .transport > #btn-play {
+    @apply min-h-[44px] w-11 min-w-0 p-0;
+  }
+
+  /* The level is spoken, not drawn: the two icon buttons are enough on a phone. */
+  .transport .volume__value {
+    @apply absolute h-px w-px overflow-hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .transport > #btn-sound .btn__label,
+  .transport > #btn-play .btn__label {
+    @apply absolute h-px w-px overflow-hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  /* Four icons on the first row (sound, volume down and up, play); the timeline gets a full
+     row of its own so its date labels have room. */
+  .transport__track {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
+  .transport .cameras,
+  .transport .sheet-toggle,
+  .transport .dock__home {
+    order: 2;
+  }
+
+  /* Cameras share what the "Dados" button leaves on the second row. */
+  .transport .cameras {
+    @apply min-w-0 flex-[1_1_200px] flex-nowrap;
+  }
+
+  .transport .cameras button {
+    @apply min-h-10 min-w-0 flex-1 overflow-hidden whitespace-nowrap px-1 text-[10.5px];
+    text-overflow: ellipsis;
+  }
+
+  .sheet-toggle {
+    @apply inline-flex min-h-10 px-3;
+  }
+
+  .sheet-toggle__chevron {
+    @apply h-[7px] w-[7px] border-t-[1.5px] border-l-[1.5px] border-current transition-transform duration-200;
+    transform: translateY(2px) rotate(45deg);
+  }
+
+  .is-sheet .sheet-toggle__chevron {
+    transform: translateY(-2px) rotate(225deg);
+  }
+
+  #btn-hud {
+    @apply hidden;
+  }
+
+  .dock__home {
+    @apply hidden;
+  }
+
+  .is-sheet .dock__home {
+    @apply inline-flex flex-[1_1_100%];
+  }
+}
+
+/* ================================================================ Brazilian skin */
+.transport__ticks,
+.profile__threshold span,
+.profile__peak span,
+.profile__marker span {
+  @apply font-body font-medium tracking-normal;
+}
+
+.dock > .panel {
+  @apply rounded-dock;
+}

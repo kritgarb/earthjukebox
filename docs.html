@@ -1,0 +1,2030 @@
+<!doctype html>
+<html lang="pt-BR" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a1128" />
+    <title>Documentação técnica · Earth Jukebox</title>
+    <meta
+      name="description"
+      content="Como o Earth Jukebox transforma dados da NASA em música: a regra, os acordes, os sotaques, o motor de áudio, as medições e as referências."
+    />
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/accessibility.css" />
+    <link rel="stylesheet" href="/src/styles/pages/docs.css" />
+  </head>
+  <body class="page-docs bg-deep-space font-head text-ink">
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+    <div
+      class="mx-auto w-full max-w-[1600px] px-page py-10 max-[520px]:py-4"
+      id="top"
+    >
+      <div data-site-header></div>
+
+      <header class="docs-head mx-auto mt-[26px] max-w-[1200px]">
+        <h1>Como os dados viram música</h1>
+        <p class="docs-head__lead">
+          Tudo o que o projeto faz, de onde vem cada número e por que cada
+          decisão foi tomada: a regra musical, o caminho até os acordes, os
+          sotaques brasileiros, o motor de áudio, as medições, a física e as
+          referências.
+        </p>
+        <p class="docs-head__note">
+          As tabelas e a calculadora desta página são geradas pelo mesmo código
+          que toca nas experiências (<code>core/music.js</code>,
+          <code>core/sotaque.js</code>, <code>SensoryMapper.js</code>). Se o
+          código mudar, a página muda junto.
+        </p>
+      </header>
+
+      <div
+        class="docs mx-auto mt-12 grid max-w-[1400px] grid-cols-[260px_minmax(0,1fr)] gap-12 max-[900px]:grid-cols-1 max-[900px]:gap-8"
+      >
+        <nav class="toc max-[900px]:w-full" aria-label="Sumário">
+          <p class="toc__title">Sumário</p>
+          <ol>
+            <li><a href="#visao">Visão geral</a></li>
+            <li><a href="#sinestesia">Usamos sinestesia?</a></li>
+            <li><a href="#caminho">Como chegamos aos acordes</a></li>
+            <li><a href="#regra">A regra, passo a passo</a></li>
+            <li><a href="#calculadora">Calculadora ao vivo</a></li>
+            <li><a href="#fenomenos">Os fenômenos</a></li>
+            <li><a href="#sotaques">Sotaques brasileiros</a></li>
+            <li><a href="#audio">Motor de áudio</a></li>
+            <li><a href="#sentidos">Tato e visão</a></li>
+            <li><a href="#dados">Dados e medições</a></li>
+            <li><a href="#fisica">Física ao vivo</a></li>
+            <li><a href="#arquitetura">Arquitetura</a></li>
+            <li><a href="#acessibilidade">Acessibilidade</a></li>
+            <li><a href="#limites">Limites e honestidade</a></li>
+            <li><a href="#referencias">Referências</a></li>
+          </ol>
+        </nav>
+
+        <main class="docs__body" id="conteudo">
+          <!-- ============================================================ 1 -->
+          <section id="visao">
+            <h2>1. Visão geral</h2>
+            <p>
+              O Earth Jukebox é a resposta do time ao Desafio 14 do NASA Space
+              Apps Challenge 2026. Ele pega onze eventos reais da Terra e toca
+              cada um como música, gerada no navegador a partir das medições.
+              Por baixo toca uma música gravada, feita no Suno e escolhida por
+              quem ouve (baião, bossa nova, brega-funk, carimbó, maracatu, samba
+              ou xote), e a locução usa uma voz sintetizada pela ElevenLabs. A
+              pergunta que o projeto responde é: como fazer alguém perceber uma
+              mudança na Terra sem depender só da visão?
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fenômeno</th>
+                    <th>Período</th>
+                    <th>Fonte dos dados</th>
+                    <th>O que entra na música</th>
+                    <th>Sotaque</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-body">
+                  <tr>
+                    <td><a href="/helene.html">Furacão Helene</a></td>
+                    <td>24 a 28 set. 2024</td>
+                    <td>
+                      EONET (trajetória e vento) · GIBS (NOAA-20, Aqua, Terra)
+                    </td>
+                    <td>Vento sustentado, em nós</td>
+                    <td>Baião</td>
+                  </tr>
+                  <tr>
+                    <td><a href="/tonga.html">Hunga Tonga</a></td>
+                    <td>15 jan. 2022</td>
+                    <td>GIBS (GOES-West) · USGS (hora da explosão)</td>
+                    <td>Diâmetro da pluma e sua expansão</td>
+                    <td>Maracatu</td>
+                  </tr>
+                  <tr>
+                    <td><a href="/nightlights.html">Luzes da noite</a></td>
+                    <td>2012 a 2023</td>
+                    <td>
+                      Earth Information Center da NASA (SVS 5313, Black Marble,
+                      satélite Suomi NPP)
+                    </td>
+                    <td>Área acesa do mapa e sua variação por ano</td>
+                    <td>Samba</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p id="eic-resources"></p>
+            <p>Quatro ideias sustentam o projeto inteiro:</p>
+            <ul>
+              <li>
+                <b>Uma regra para todos os fenômenos.</b> A intensidade escolhe
+                a nota e o acorde; a velocidade de mudança escolhe o andamento.
+                Quem aprende em um fenômeno ouve os outros.
+              </li>
+              <li>
+                <b>Música, não efeito sonoro.</b> O dado escolhe um grau de uma
+                escala, nunca uma frequência solta. Relâmpagos, rupturas e a
+                explosão entram como notas do acorde, no tempo da música.
+              </li>
+              <li>
+                <b>O sotaque muda quem toca, não a regra.</b> Os ritmos seguem a
+                mesma relação entre os dados, as notas e o andamento; os
+                instrumentos entram quando a medição cruza seus limiares. A
+                bossa nova usa acordes com sétima, enquanto baião, samba e
+                maracatu usam tríades.
+              </li>
+              <li>
+                <b>Medido, calculado e ilustrativo nunca se confundem.</b> Cada
+                linha da interface carrega a palavra que diz de onde vem o
+                valor.
+              </li>
+            </ul>
+          </section>
+
+          <!-- ============================================================ 2 -->
+          <section id="sinestesia">
+            <h2>2. Usamos sinestesia sensorial?</h2>
+            <p class="answer">
+              Resposta curta: a ideia nasceu com esse nome nas notas do time,
+              mas o que o projeto usa, tecnicamente, são
+              <b>correspondências entre os sentidos</b> (em inglês,
+              <i>crossmodal correspondences</i>), não sinestesia.
+            </p>
+            <p>
+              A primeira versão do mapeamento sonoro trazia este comentário no
+              código: as escalas seguiam as notas do time "Ideias e Conceitos /
+              Sinestesia", com 35 kt perto de 220 Hz, 155 kt perto de 880 Hz,
+              vento mais rápido igual a ritmo mais rápido e timbre mais áspero
+              igual a mais perigo. Essas notas não estão no repositório; o que
+              está aqui é o que o código e o histórico de versões registram.
+            </p>
+            <h3>Por que a distinção importa</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Sinestesia</th>
+                    <th>Correspondência entre sentidos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>O que é</th>
+                    <td>
+                      Condição neurológica em que um estímulo dispara, de forma
+                      automática, uma percepção em outro sentido (ver cor ao
+                      ouvir uma nota)
+                    </td>
+                    <td>
+                      Tendência a associar dimensões de sentidos diferentes
+                      (agudo com alto, pequeno, claro; rápido com veloz)
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Quem tem</th>
+                    <td>Uma pequena parcela das pessoas</td>
+                    <td>Quase todo mundo</td>
+                  </tr>
+                  <tr>
+                    <th>É igual entre pessoas?</th>
+                    <td>Não. Cada sinesteta tem as suas associações</td>
+                    <td>Em boa parte, sim. Por isso serve para comunicar</td>
+                  </tr>
+                  <tr>
+                    <th>Serve para projetar som?</th>
+                    <td>Não: o mapa de uma pessoa não vale para outra</td>
+                    <td>Sim: o ouvinte entende sem treino</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              A revisão de Spence (2011) reúne as correspondências que a
+              pesquisa encontrou de forma consistente. Deroy e Spence (2013)
+              argumentam que elas não são uma forma fraca de sinestesia, e sim
+              outro fenômeno. Um produto que precisa ser entendido em segundos
+              por qualquer pessoa só pode se apoiar no que é compartilhado.
+            </p>
+            <h3>As correspondências que o projeto usa</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Dado</th>
+                    <th>Vira</th>
+                    <th>Correspondência</th>
+                    <th>Onde está no código</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Intensidade do fenômeno</td>
+                    <td>Altura da nota e do acorde</td>
+                    <td>Agudo = mais (magnitude e altura do som)</td>
+                    <td>
+                      <code>jukebox()</code> em <code>core/music.js</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidade de mudança</td>
+                    <td>Andamento e figura rítmica</td>
+                    <td>Rápido = veloz (tempo e movimento)</td>
+                    <td>
+                      <code>jukebox()</code>: <code>bpm</code>,
+                      <code>arpRate</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidade ou água mais quente</td>
+                    <td>Brilho do timbre (corte do filtro)</td>
+                    <td>Mais energia = som mais claro</td>
+                    <td><code>brightnessHz</code></td>
+                  </tr>
+                  <tr>
+                    <td>Longitude na trajetória</td>
+                    <td>Posição estéreo</td>
+                    <td>Espaço para espaço</td>
+                    <td><code>pan</code></td>
+                  </tr>
+                  <tr>
+                    <td>Largura da pluma</td>
+                    <td>Tamanho do eco (reverberação)</td>
+                    <td>Maior = espaço mais amplo</td>
+                    <td><code>reverbWet</code></td>
+                  </tr>
+                  <tr>
+                    <td>Topos mais frios da pluma</td>
+                    <td>Brilho agudo e trêmulo</td>
+                    <td>Frio = agudo e cristalino</td>
+                    <td><code>shimmerDb</code></td>
+                  </tr>
+                  <tr>
+                    <td>Intensidade</td>
+                    <td>
+                      Pulsos de vibração mais longos, mais numerosos e mais
+                      próximos
+                    </td>
+                    <td>Forte = mais energia no tato</td>
+                    <td><code>intensityToVibration()</code></td>
+                  </tr>
+                  <tr>
+                    <td>Intensidade</td>
+                    <td>Cor, do verde-mar ao rosa quente</td>
+                    <td>Calmo = frio, intenso = quente</td>
+                    <td>
+                      <code>intensityColor</code> em <code>palette.js</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Batida da música</td>
+                    <td>Anel de luz saindo do fenômeno</td>
+                    <td>Som e imagem no mesmo instante</td>
+                    <td><code>BeatRings.js</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Além das correspondências, o projeto usa
+              <b>redundância entre canais</b>: o mesmo dado sai ao mesmo tempo
+              como som, imagem e vibração. Se um canal falta (a pessoa não vê a
+              tela, o celular está sem som), os outros carregam a informação.
+            </p>
+            <p>
+              Uma correspondência saiu do projeto:
+              <b>timbre áspero = perigo</b>. A primeira versão aplicava
+              distorção acima de 72% de intensidade. Ela foi removida porque, na
+              prática, deixava a música cansativa justamente no pico do evento.
+              Hoje o perigo é ouvido pela altura, pelo andamento e pelo tamanho
+              da banda.
+            </p>
+          </section>
+
+          <!-- ============================================================ 3 -->
+          <section id="caminho">
+            <h2>3. Como chegamos aos acordes</h2>
+            <p>
+              Os acordes não foram o ponto de partida. O projeto começou como
+              uma sonificação direta (dado vira frequência) e chegou à música em
+              sete passos, todos registrados no histórico de versões.
+            </p>
+            <ol class="steps">
+              <li>
+                <h3>Frequência contínua</h3>
+                <p>
+                  A primeira versão mapeava o vento direto em hertz:
+                  <code>expMap(vento, 220, 880)</code>, de 35 a 155 kt, em curva
+                  exponencial (passos iguais para o ouvido). O andamento ia de
+                  52 a 168 BPM e a distorção crescia com o perigo. Funcionava
+                  como alarme, mas soava como sirene: a frequência deslizava sem
+                  nunca pousar em uma nota.
+                </p>
+              </li>
+              <li>
+                <h3>Cada fenômeno com sua lógica</h3>
+                <p>
+                  Ao entrar o iceberg e o vulcão, cada um ganhou um mapa
+                  próprio: o iceberg ia de 41 a 196 Hz (maior = mais grave) e o
+                  drone do Tonga <em>descia</em> de 110 para 36 Hz enquanto a
+                  pluma crescia. O problema ficou claro: em um fenômeno agudo
+                  queria dizer "mais", em outro queria dizer "menos". O ouvinte
+                  tinha que reaprender a cada página.
+                </p>
+              </li>
+              <li>
+                <h3>A virada: grau de escala no lugar de hertz</h3>
+                <p>
+                  Nasce <code>core/music.js</code>. O dado deixa de escolher uma
+                  frequência e passa a escolher um <b>grau de uma escala</b>: 15
+                  graus de Lá menor natural, de Lá2 a Lá4. Sobre o grau, o
+                  acorde é montado empilhando terças da própria escala. A mesma
+                  função, <code>jukebox(nível, velocidade)</code>, passa a
+                  servir os três fenômenos, e nasce a regra única. Os acordes
+                  mudam só na batida, então uma mudança no dado é ouvida como a
+                  harmonia andando, e as notas saltam em vez de deslizar, como
+                  em um instrumento.
+                </p>
+              </li>
+              <li>
+                <h3>A música na frente, a textura atrás</h3>
+                <p>
+                  Vento, chuva, mar e rugido foram empurrados para baixo da
+                  música (o vento caiu de −9 dB para −20 dB no máximo, depois
+                  para −33 dB) e um filtro passa-baixa em 7 kHz entrou na saída
+                  para tirar o chiado.
+                </p>
+              </li>
+              <li>
+                <h3>Sotaque brasileiro</h3>
+                <p>
+                  Entram baião, bossa nova e maracatu
+                  (<code>core/sotaque.js</code>). O baião troca o modo para Lá
+                  dórico (o menor com a sexta elevada, típico do Nordeste), a
+                  bossa passa a usar acordes com sétima, e a intensidade ganha
+                  um segundo papel: decidir quem toca. Cada instrumento entra em
+                  um limiar do dado.
+                </p>
+              </li>
+              <li>
+                <h3>Os eventos entram no acorde</h3>
+                <p>
+                  O relâmpago era um estalo de ruído; virou um sino em uma nota
+                  do acorde atual, encaixado na próxima colcheia. A ruptura do
+                  iceberg era um estalo; virou uma cascata de notas do acorde
+                  caindo, como um glissando de harpa. A explosão virou um golpe
+                  de tambor grave e o acorde inteiro se abrindo. As melodias
+                  deixaram de ser contornos mecânicos e viraram frases de cada
+                  gênero, com pausas. A distorção foi zerada e um compressor
+                  suave entrou para a música estar presente desde o primeiro
+                  compasso.
+                </p>
+              </li>
+              <li>
+                <h3>Quadros do EIC</h3>
+                <p>
+                  As três primeiras experiências usavam a EONET e a GIBS, e só o
+                  Tonga media pixels. A quarta, Luzes da noite, é feita dos
+                  quadros do Earth Information Center (SVS 5313): a área acesa
+                  de cada ano é medida pixel a pixel, uma linha varre o mapa e
+                  cada lugar aceso vira um sino do acorde. Entra o samba
+                  (<code>core/sotaque.js</code>), com os instrumentos entrando
+                  por limiar de área acesa.
+                </p>
+              </li>
+              <li>
+                <h3>Mais recursos do desafio</h3>
+                <p>
+                  O iceberg A23a saiu para o site ficar mais leve, e entraram
+                  quatro experiências feitas de quadros do EIC: relâmpagos da
+                  ISS (SVS 5011), CO₂ do DYAMOND (SVS 5196), altura das
+                  florestas do GEDI (SVS 4950) e aerossóis do GEOS (SVS 5669).
+                  Todas rodam no mesmo motor, a página eic.html, e a Home passou
+                  a separar as experiências pela fonte dos dados.
+                </p>
+              </li>
+              <li>
+                <h3>Todos os recursos de dados do desafio</h3>
+                <p>
+                  Os outros quatro recursos que o desafio recomenda como dados
+                  entraram: correntes e temperatura do mar (SVS 3912), qualidade
+                  do ar (SVS 5533), Perpetual Ocean 2 (SVS 5425) e o rio
+                  atmosférico em 3D (SVS 4960). Agora 9 dos 11 recursos da lista
+                  são usados como dados; o Caldwell 73 inspirou a varredura e a
+                  galeria do EIC é a origem de todos.
+                </p>
+              </li>
+            </ol>
+
+            <h3>Por que Lá menor?</h3>
+            <p>
+              O código registra a escolha, mas não o motivo: a constante
+              <code>JUKEBOX</code> diz apenas "a mesma tonalidade, Lá menor, de
+              Lá2 a Lá4". O que dá para afirmar com base no histórico:
+            </p>
+            <ul>
+              <li>
+                <b>O Lá veio das âncoras da primeira versão.</b> 220 Hz e 880
+                Hz, os extremos do primeiro mapa, são as notas Lá3 e Lá5. Ao
+                quantizar, a fundamental continuou sendo Lá, duas oitavas abaixo
+                (Lá2 = 110 Hz).
+              </li>
+              <li>
+                <b>Duas oitavas, 15 graus.</b> Uma escala de 7 notas em duas
+                oitavas dá 15 graus contando a nota final. É resolução
+                suficiente para ouvir cada categoria Saffir-Simpson em uma nota
+                diferente (ver a tabela abaixo) sem sair do registro em que as
+                notas são fáceis de distinguir.
+              </li>
+              <li>
+                <b>O modo menor é uma decisão estética</b>, coerente com eventos
+                graves (um furacão, um iceberg sumindo, uma explosão). Não há
+                teste com usuários por trás dela. Isso é interpretação nossa a
+                partir do código, não um registro do time.
+              </li>
+              <li>
+                <b>Menor natural e dórico diferem em uma nota só</b> (Fá e Fá
+                sustenido), então o sotaque muda a cor sem mudar a regra.
+              </li>
+            </ul>
+          </section>
+
+          <!-- ============================================================ 4 -->
+          <section id="regra">
+            <h2>4. A regra, passo a passo</h2>
+            <p>
+              Cada fenômeno entrega à regra dois números entre 0 e 1: o
+              <b>nível</b> (quão intenso está agora) e a <b>velocidade</b> (quão
+              rápido está mudando).
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fenômeno</th>
+                    <th>Nível (0 a 1)</th>
+                    <th>Velocidade (0 a 1)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Helene</td>
+                    <td><code>norm(vento, 35, 155)</code> em nós</td>
+                    <td><code>norm(vento, 15, 140)</code>, o próprio vento</td>
+                  </tr>
+                  <tr>
+                    <td>Tonga</td>
+                    <td><code>norm(diâmetro, 0, 750)</code> em km</td>
+                    <td>
+                      <code>norm(expansão, 0, 6)</code> em km/min, zero antes da
+                      explosão
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Luzes da noite</td>
+                    <td>
+                      <code>norm(área acesa, 0,315%, 0,447%)</code>, a menor e a
+                      maior dos 12 quadros anuais
+                    </td>
+                    <td>
+                      <code>norm(|variação anual|, 0, 0,037 p.p.)</code>, a
+                      maior variação entre dois anos
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="aside">
+              <code>norm(v, min, max)</code> é
+              <code>(v − min) / (max − min)</code>, preso entre 0 e 1.
+            </p>
+
+            <h3>Do nível à nota</h3>
+            <pre><code>grau   = round(nível × 14)                      // 15 graus, de 0 a 14
+midi   = 45 + 12 × ⌊grau / 7⌋ + escala[grau mod 7]   // 45 = Lá2
+hertz  = 440 × 2^((midi − 69) / 12)             // temperamento igual, Lá4 = 440 Hz
+
+menor natural (eólio) = [0, 2, 3, 5, 7, 8, 10]  // semitons acima da fundamental
+dórico (baião)        = [0, 2, 3, 5, 7, 9, 10]  // sexta elevada: Fá vira Fá#</code></pre>
+
+            <h3>Da nota ao acorde</h3>
+            <p>
+              O acorde é montado sobre o grau, pulando uma nota da escala a cada
+              passo (terças empilhadas): graus <code>g</code>,
+              <code>g + 2</code>, <code>g + 4</code> formam a tríade;
+              <code>g + 6</code> acrescenta a sétima. Como as notas vêm sempre
+              da escala, o resultado é o campo harmônico do tom: a qualidade do
+              acorde (maior, menor, diminuto) não é escolhida, ela aparece
+              sozinha.
+            </p>
+            <pre><code>acorde(g) = [ nota(g), nota(g + 2), nota(g + 4) ]            // tríade (universal, baião, maracatu)
+acorde(g) = [ nota(g), nota(g + 2), nota(g + 4), nota(g + 6) ] // tétrade (bossa nova)</code></pre>
+
+            <h3>Os 15 graus</h3>
+            <p>
+              Tabela gerada pelo código. As quatro últimas colunas mostram o
+              valor do dado que cai em cada grau.
+            </p>
+            <div class="table-wrap">
+              <table id="scale-table" class="dense">
+                <thead>
+                  <tr>
+                    <th>Grau</th>
+                    <th>Nota</th>
+                    <th>Hz</th>
+                    <th>MIDI</th>
+                    <th>Tríade em Lá menor</th>
+                    <th>No dórico</th>
+                    <th>Com sétima</th>
+                    <th>Vento</th>
+                    <th>Pluma</th>
+                    <th>Luzes</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="aside">
+              Os nomes seguem o solfejo brasileiro com o número da oitava
+              científica (Dó4 é o dó central). Cada grau do furacão cobre cerca
+              de 8,6 kt.
+            </p>
+
+            <h3>Da velocidade ao andamento</h3>
+            <pre><code>BPM    = 60 + velocidade × 90          // de 60 a 150 batidas por minuto
+figura = semínimas      se velocidade &lt; 0,33
+         colcheias      se velocidade &lt; 0,66
+         semicolcheias  caso contrário</code></pre>
+            <p>
+              O andamento muda em rampa de 0,4 s, sem saltos. A figura rítmica
+              vale para o arpejo (sotaque universal) ou para a melodia (sotaque
+              brasileiro). No furacão, isso dá semínimas até cerca de 56 kt,
+              colcheias até cerca de 97 kt e semicolcheias acima disso.
+            </p>
+
+            <h3>Quando o acorde muda</h3>
+            <p>
+              O dado pode pedir outro acorde a qualquer momento, mas a troca só
+              soa na <b>próxima batida</b>. O acorde pedido fica guardado e o
+              laço da batida compara com o que está soando. Assim a harmonia
+              nunca corta um compasso no meio. O controlador envia parâmetros ao
+              áudio no máximo a cada 60 ms (cerca de 16 vezes por segundo): o
+              ouvido percebe como contínuo e o relógio de áudio não é inundado
+              de rampas.
+            </p>
+          </section>
+
+          <!-- ============================================================ 5 -->
+          <section id="calculadora">
+            <h2>5. Calculadora ao vivo</h2>
+            <p>
+              Mexa no dado e veja o que a regra devolve. Os valores saem das
+              mesmas funções que as experiências chamam.
+            </p>
+            <div class="calc">
+              <div class="calc__controls">
+                <label class="calc__field">
+                  <span class="calc__label">Fenômeno</span>
+                  <select id="calc-event">
+                    <option value="helene">Furacão Helene</option>
+                    <option value="tonga">Hunga Tonga</option>
+                    <option value="nightlights">Luzes da noite</option>
+                  </select>
+                </label>
+                <label class="calc__field">
+                  <span class="calc__label">Sotaque</span>
+                  <select id="calc-accent">
+                    <option value="br">Brasileiro</option>
+                    <option value="universal">Universal</option>
+                  </select>
+                </label>
+                <label class="calc__field">
+                  <span class="calc__label">Intensidade</span>
+                  <input id="calc-a" type="range" />
+                  <output id="calc-a-out" for="calc-a" class="mono"></output>
+                </label>
+                <label class="calc__field">
+                  <span class="calc__label">Velocidade</span>
+                  <input id="calc-b" type="range" />
+                  <output id="calc-b-out" for="calc-b" class="mono"></output>
+                </label>
+                <button class="calc__play" id="calc-play" type="button">
+                  Ouvir o acorde
+                </button>
+              </div>
+              <dl class="calc__out" id="calc-out" aria-live="polite"></dl>
+            </div>
+          </section>
+
+          <!-- ============================================================ 6 -->
+          <section id="fenomenos">
+            <h2>6. Os fenômenos</h2>
+            <p>
+              A música é a mesma regra em todos. O que muda por fenômeno é a
+              <b>textura</b> por baixo da música e os
+              <b>eventos pontuais</b> por cima. Tudo abaixo vem de
+              <code>src/models/SensoryMapper.js</code>.
+            </p>
+
+            <h3>Furacão Helene</h3>
+            <p>
+              A linha do tempo de quatro dias toca em 48 segundos. Vozes:
+              <code>StormVoice</code> e <code>ThunderVoice</code>.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Entrada</th>
+                    <th>Saída</th>
+                    <th>Faixa</th>
+                    <th>Origem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Vento, 35 a 155 kt</td>
+                    <td>Nota e acorde</td>
+                    <td>Lá2 a Lá4</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Vento, 15 a 140 kt</td>
+                    <td>Andamento</td>
+                    <td>60 a 150 BPM</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Vento ao quadrado</td>
+                    <td>Volume do vento (ruído rosa em filtro passa-banda)</td>
+                    <td>−56 a −33 dB</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Vento</td>
+                    <td>Brilho (filtro passa-baixa)</td>
+                    <td>500 a 2.400 Hz, exponencial</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Vento</td>
+                    <td>Desafinação do núcleo (3 dentes de serra)</td>
+                    <td>4 a 16 cents</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Vento acima de 35% da faixa</td>
+                    <td>Chuva (ruído rosa em 1.600 Hz)</td>
+                    <td>−60 a −46 dB</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Longitude na trajetória</td>
+                    <td>Posição estéreo</td>
+                    <td>esquerda a direita</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Vento, 34 a 140 kt</td>
+                    <td>Relâmpagos por minuto (sino e tambor no acorde)</td>
+                    <td>2 a 40</td>
+                    <td><span class="tag tag--i">ilustrativo</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              <b>Câmera no olho:</b> dentro do olho do furacão o ar é quase
+              parado. O vento cai 16 dB, a chuva some, o brilho cai para 45% e a
+              reverberação dobra (<code>insideEye()</code>). O pulso da música
+              continua.
+            </p>
+            <p>
+              <b>Relâmpago:</b> um sino em FM (harmonicidade 3,01) toca uma nota
+              sorteada do acorde, duas oitavas acima, e um tambor grave toca a
+              fundamental. O golpe é agendado na próxima colcheia do transporte
+              e a banda responde no máximo uma vez a cada 1,6 s. Os relâmpagos
+              são desenhados a partir do vento: não há dados de descargas
+              carregados.
+            </p>
+            <p>
+              <b>Olho visível:</b> só aparece em força de furacão e fica nítido
+              entre 64 e 105 kt (<code>hurricaneToVisual()</code>).
+            </p>
+
+            <h3>Hunga Tonga</h3>
+            <p>
+              Quatro horas de imagens tocam em 70 segundos. Vozes:
+              <code>EruptionVoice</code> e <code>ThunderVoice</code>.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Entrada</th>
+                    <th>Saída</th>
+                    <th>Faixa</th>
+                    <th>Origem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Diâmetro da pluma, 0 a 750 km</td>
+                    <td>Nota e acorde</td>
+                    <td>Lá2 a Lá4</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Expansão da borda, 0 a 6 km/min</td>
+                    <td>Andamento</td>
+                    <td>60 a 150 BPM</td>
+                    <td><span class="tag tag--c">calculado</span></td>
+                  </tr>
+                  <tr>
+                    <td>Expansão</td>
+                    <td>Rugido (ruído marrom em passa-banda)</td>
+                    <td>−58 a −34 dB · 110 a 520 Hz</td>
+                    <td><span class="tag tag--c">calculado</span></td>
+                  </tr>
+                  <tr>
+                    <td>Diâmetro</td>
+                    <td>Drone (uma oitava abaixo) e sub (duas abaixo)</td>
+                    <td>−30 a −17 dB</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Diâmetro</td>
+                    <td>Reverberação: o espaço abre com a pluma</td>
+                    <td>20% a 60%</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Núcleo frio (fração de pixels vermelhos), 0 a 0,4</td>
+                    <td>Brilho gélido em 1.760 Hz</td>
+                    <td>−62 a −20 dB</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Hora da explosão (USGS)</td>
+                    <td>Tambor grave e acorde cheio</td>
+                    <td>uma vez</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Expansão</td>
+                    <td>Relâmpagos por minuto</td>
+                    <td>0 a 45</td>
+                    <td><span class="tag tag--i">ilustrativo</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              <b>Explosão:</b> um golpe de tambor em 55 Hz (Lá1) que cai duas
+              oitavas e meia em meio segundo, e sobre ele o acorde atual aberto
+              do grave para o agudo: fundamental uma oitava abaixo, fundamental,
+              quinta, oitava e terça na oitava de cima. Soa quando a linha do
+              tempo cruza 04:14:45 UTC.
+            </p>
+
+            <h3>Luzes da noite</h3>
+            <p>
+              Os 12 quadros anuais (2012 a 2023) ocupam os primeiros 72% da
+              linha do tempo e o mapa de mudança o resto; tudo toca em 80
+              segundos. Vozes: <code>NightLightsVoice</code>. Uma linha varre o
+              mapa em 14 segundos, e a cada 120 ms a coluna sob ela (3,75° de
+              longitude) é lida e pode tocar um sino.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Entrada</th>
+                    <th>Saída</th>
+                    <th>Faixa</th>
+                    <th>Origem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Área acesa do mapa, 0,315% a 0,447%</td>
+                    <td>Nota e acorde</td>
+                    <td>Lá2 a Lá4</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Variação anual da área acesa, 0 a 0,037 p.p.</td>
+                    <td>Andamento</td>
+                    <td>60 a 150 BPM</td>
+                    <td><span class="tag tag--c">calculado</span></td>
+                  </tr>
+                  <tr>
+                    <td>Área acesa</td>
+                    <td>Cintilação, três oitavas acima da nota</td>
+                    <td>−62 a −30 dB</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Área acesa</td>
+                    <td>Drone na nota atual</td>
+                    <td>−36 a −22 dB</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Pixels acesos na coluna sob a linha</td>
+                    <td>
+                      Sino numa nota do acorde: a latitude média dos pixels
+                      escolhe a nota (mais ao norte, mais agudo) e a longitude
+                      da coluna escolhe o lado do som
+                    </td>
+                    <td>chance proporcional à coluna</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Pixels roxos no mapa de mudança (mais luz)</td>
+                    <td>Sino agudo e cristalino, duas oitavas acima</td>
+                    <td>chance proporcional à coluna</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                  <tr>
+                    <td>Pixels laranja no mapa de mudança (menos luz)</td>
+                    <td>Nota grave e suave que se apaga</td>
+                    <td>chance proporcional à coluna</td>
+                    <td><span class="tag tag--m">medido</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Os quadros do EIC são imagens de visualização, com brilho e cores
+              ajustados para serem vistos, não radiância calibrada. Por isso as
+              medidas valem para comparar um ano com outro dentro do mesmo
+              conjunto, não como valores físicos. Um pixel conta como aceso
+              quando a luminância passa de 60 em 255; no mapa de mudança, roxo é
+              mais luz em 2023 do que em 2012 e laranja é menos luz. Nos 12
+              quadros, a área acesa vai de 0,315% a 0,447% (+42%), com um único
+              recuo, em 2020.
+            </p>
+            <div id="eic-docs"></div>
+          </section>
+
+          <!-- ============================================================ 7 -->
+          <section id="sotaques">
+            <h2>7. Sotaques brasileiros</h2>
+            <p>
+              Um sotaque é o conjunto de instrumentos que toca a regra. O
+              acorde, o andamento e a lógica são os mesmos do sotaque universal
+              (três sintetizadores: pad, arpejo e baixo). O sotaque brasileiro
+              acrescenta uma camada de informação:
+              <b>cada instrumento entra quando o nível cruza um limiar</b>. De
+              olhos fechados, dá para saber em que faixa o fenômeno está
+              contando quem está tocando.
+            </p>
+            <p>
+              As grades abaixo têm 16 semicolcheias (dois compassos de 2/4). A
+              intensidade de cada célula é a força da nota, de 0 a 1; cada golpe
+              ainda recebe uma variação aleatória de ±12% para soar tocado por
+              gente. Os instrumentos não são gravados: tambores, ferros e foles
+              são osciladores e ruído. A única música gravada é a faixa do Suno
+              que toca por baixo, escolhida por quem ouve.
+            </p>
+
+            <article class="style style--baiao">
+              <h3>Baião · Furacão Helene</h3>
+              <p>
+                <b>Por quê:</b> o vento toca a sanfona, um instrumento que só
+                soa com ar em movimento. Cada categoria da escala Saffir-Simpson
+                traz um instrumento do trio de forró.
+                <span class="mono" id="key-baiao"></span>.
+              </p>
+              <div class="table-wrap">
+                <table id="layers-baiao">
+                  <thead>
+                    <tr>
+                      <th>Instrumento</th>
+                      <th>Entra em</th>
+                      <th>Nível</th>
+                      <th>Dado</th>
+                      <th>Nota e acorde nesse ponto</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="seq" id="grid-baiao"></div>
+              <p>
+                <b>Frase da sanfona</b> (passos da escala acima da fundamental
+                do acorde; ponto = pausa):
+                <span class="mono phrase" id="phrase-baiao"></span>
+              </p>
+              <p>
+                A zabumba faz o 3+3+2 do baião ("tum, tum, tá"). A frase se
+                apoia na quinta e na sexta elevada do dórico, desce para casa e
+                responde. O Helene chegou a 120 kt (categoria 4), então a caixa,
+                que só entra na categoria 5, nunca toca nesta história: a
+                ausência também é informação, e o encerramento diz isso.
+              </p>
+            </article>
+
+            <article class="style style--maracatu">
+              <h3>Maracatu de baque virado · Hunga Tonga</h3>
+              <p>
+                <b>Por quê:</b> as alfaias são os tambores mais graves da música
+                brasileira. Antes da explosão só o gonguê marca o tempo; a pluma
+                traz o baque inteiro.
+                <span class="mono" id="key-maracatu"></span>.
+              </p>
+              <div class="table-wrap">
+                <table id="layers-maracatu">
+                  <thead>
+                    <tr>
+                      <th>Instrumento</th>
+                      <th>Entra em</th>
+                      <th>Nível</th>
+                      <th>Dado</th>
+                      <th>Nota e acorde nesse ponto</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="seq" id="grid-maracatu"></div>
+              <p>
+                <b>Frase</b> (metais, ou uma voz grave antes de eles entrarem):
+                <span class="mono phrase" id="phrase-maracatu"></span>
+              </p>
+              <p>
+                O gonguê toca notas do acorde, então até quem marca o tempo está
+                na harmonia. As duas alfaias ficam na fundamental: a grave leva
+                os acentos, a outra fica uma oitava acima.
+              </p>
+            </article>
+
+            <article class="style style--samba">
+              <h3>Samba · Luzes da noite</h3>
+              <p>
+                <b>Por quê:</b> o samba é a música das cidades, e as luzes da
+                noite são as cidades vistas do espaço. O surdo marca o pulso
+                desde 2012; cada limiar de área acesa traz mais um instrumento
+                da roda. <span class="mono" id="key-samba"></span>.
+              </p>
+              <div class="table-wrap">
+                <table id="layers-samba">
+                  <thead>
+                    <tr>
+                      <th>Instrumento</th>
+                      <th>Entra em</th>
+                      <th>Nível</th>
+                      <th>Dado</th>
+                      <th>Nota e acorde nesse ponto</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="seq" id="grid-samba"></div>
+              <p>
+                <b>Frase</b> (cavaquinho, ou uma voz antes de ele entrar):
+                <span class="mono phrase" id="phrase-samba"></span>
+              </p>
+              <p>
+                O surdo marca o segundo tempo do compasso, o coração do samba. O
+                cavaquinho toca os acordes e a frase, então quando ele entra a
+                roda ganha melodia.
+              </p>
+            </article>
+
+            <div id="eic-accents"></div>
+
+            <p>
+              <b>Bossa nova · florestas e águas quentes:</b> o violão toca os
+              acordes, o baixo sustenta as notas graves, e ganzá, aro de caixa e
+              flauta entram conforme a medida aumenta. Na experiência GEDI, os
+              instrumentos entram nos níveis 0%, 15%, 30%, 50% e 70%; na
+              experiência de temperatura do mar, entram em 0%, 20%, 40%, 60% e
+              80%.
+            </p>
+
+            <h3>Como cada instrumento é sintetizado</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Família</th>
+                    <th>Instrumentos</th>
+                    <th>Receita (Tone.js)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Pele grave</td>
+                    <td>zabumba, alfaia, surdo</td>
+                    <td>
+                      <code>MembraneSynth</code>: senoide com queda rápida de
+                      afinação (2 oitavas em 30 a 50 ms), afinada na fundamental
+                      do acorde dobrada para 55 a 104 Hz, para soar em caixas
+                      pequenas
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ferro</td>
+                    <td>triângulo, agogô, gonguê, aro</td>
+                    <td>
+                      <code>FMSynth</code> como sino pequeno: dois parciais,
+                      índice de modulação 2,5, harmonicidade de 1,41 a 3,4
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ruído curto</td>
+                    <td>bacalhau, caixa, ganzá, agbê, pandeiro, tamborim</td>
+                    <td>
+                      <code>NoiseSynth</code> (ruído rosa ou branco) em filtro
+                      passa-banda de 1.500 a 4.200 Hz, 40 a 90 ms
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Palheta</td>
+                    <td>sanfona, fole</td>
+                    <td>
+                      Dois dentes de serra levemente desafinados por nota (16
+                      cents): é isso que faz um acordeão soar como acordeão
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Corda dedilhada</td>
+                    <td>violão, baixo, cavaquinho</td>
+                    <td>
+                      Onda triangular (violão) ou senoide (baixo), ataque de 6
+                      ms e decaimento de 1,3 s, sem sustentação
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Voz que canta</td>
+                    <td>flauta, metais, voz grave</td>
+                    <td>
+                      <code>Synth</code> monofônico com vibrato de 5 Hz e
+                      deslize curto entre notas (30 a 60 ms)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Cama</td>
+                    <td>pad (todos os estilos)</td>
+                    <td>
+                      Três triângulos desafinados segurando o acorde uma oitava
+                      abaixo, filtro em 1.100 Hz
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              A percussão é suave de propósito: ataques mais lentos e bandas
+              mais graves que as de um kit real, para o ritmo ser sentido como
+              pulso sob a canção e não como uma fileira de cliques. Os padrões
+              são
+              <em>inspirados</em> nos gêneros; não são transcrições de
+              gravações.
+            </p>
+
+            <h3>Sotaque universal</h3>
+            <p>
+              Três sintetizadores, sempre os três
+              (<code>HarmonyLayer.js</code>): um pad segura o acorde uma oitava
+              abaixo; um arpejo em FM sobe pelas notas do acorde em duas oitavas
+              e volta ao início; um baixo de membrana toca a fundamental, duas
+              oitavas abaixo, em toda batida. Trocar de sotaque no meio da
+              música (tecla B) faz a banda antiga parar e a nova entrar no mesmo
+              acorde e no mesmo andamento.
+            </p>
+          </section>
+
+          <!-- ============================================================ 8 -->
+          <section id="audio">
+            <h2>8. Motor de áudio</h2>
+            <p>
+              Todo o som é síntese em tempo real com Tone.js sobre a Web Audio
+              API. Não há arquivos de áudio no projeto.
+            </p>
+            <h3>Cadeia de sinal</h3>
+            <pre><code>voz do fenômeno ─┬─ música (pad, melodia, percussão) ─┐
+                 └─ texturas (vento, mar, rugido)     ├─► reverberação ─► panorama ─► saída da voz
+voz de evento (sino, harpa, explosão) ───────────────┘
+                                   │
+                                   ▼
+entrada do barramento ─► compressor (−26 dB, 3:1) ─► ganho +5 dB ─► passa-baixa 7 kHz ─► limitador −1,5 dB ─► alto-falante
+        │
+        └─► analisadores: forma de onda (1.024 amostras) e espectro (64 faixas)</code></pre>
+            <ul>
+              <li>
+                <b>Compressor:</b> segura a banda junta e levanta as aberturas
+                quietas, para a música estar presente desde o primeiro compasso,
+                não só no pico.
+              </li>
+              <li>
+                <b>Passa-baixa em 7 kHz:</b> corta o topo, onde as texturas de
+                ruído viram chiado.
+              </li>
+              <li><b>Limitador:</b> impede a saída de saturar.</li>
+              <li>
+                <b>Percussão seca:</b> a melodia e os acordes passam pela
+                reverberação; a percussão vai quase direta (22% de sala), para
+                ficar firme.
+              </li>
+              <li>
+                <b>Analisadores:</b> alimentam o osciloscópio da interface e o
+                volume RMS que faz a cena 3D reagir ao que está tocando de fato.
+              </li>
+            </ul>
+            <h3>Tempo e sincronia</h3>
+            <ul>
+              <li>
+                Tudo é agendado no <b>transporte</b> do Tone.js, com precisão de
+                amostra. A grade de percussão roda em semicolcheias; a melodia,
+                na figura que a velocidade escolheu.
+              </li>
+              <li>
+                As atualizações visuais ligadas à batida usam um temporizador
+                calculado a partir do relógio de áudio, porque o agendador
+                visual do Tone.js descarta eventos quando um quadro atrasa.
+              </li>
+              <li>
+                A chance de uma gota de degelo é ajustada pelo andamento (<code
+                  >gotas por minuto ÷ (BPM × 4)</code
+                >), para a taxa real não depender da velocidade da música.
+              </li>
+            </ul>
+            <h3>Liberar o áudio</h3>
+            <p>
+              O navegador só libera som depois de um gesto, então toda
+              experiência começa com um toque. No iPhone, a Web Audio obedece à
+              chave de silencioso; a página se declara como reprodução de mídia
+              (<code>navigator.audioSession.type = 'playback'</code> no iOS 17
+              ou mais novo, e um <code>&lt;audio&gt;</code> em laço com um
+              segundo de silêncio gerado em memória nas versões anteriores) para
+              soar como um vídeo soaria. O áudio também é retomado quando a aba
+              volta a ficar visível.
+            </p>
+          </section>
+
+          <!-- ============================================================ 9 -->
+          <section id="sentidos">
+            <h2>9. Tato e visão</h2>
+            <h3>Vibração</h3>
+            <p>
+              No celular, usa a Vibration API. Os padrões são listas de
+              milissegundos (liga, desliga, liga...).
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Evento</th>
+                    <th>Padrão</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Intensidade contínua</td>
+                    <td>
+                      1 a 5 pulsos; cada um de 35 a 190 ms; pausas de 230 a 45
+                      ms. Mais forte = mais pulsos, mais longos e mais juntos
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Relâmpago</td>
+                    <td>Um pulso de 30 a 90 ms</td>
+                  </tr>
+                  <tr>
+                    <td>Intensificação rápida</td>
+                    <td>90 · 60 · 90 · 60 · 220 ms</td>
+                  </tr>
+                  <tr>
+                    <td>Explosão do Tonga</td>
+                    <td>
+                      600 · 60 · 380 · 60 · 220 · 80 · 120 ms: um tremor longo
+                      que se apaga
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lugar que escurece (Luzes da noite)</td>
+                    <td>
+                      Um pulso de 90 ms, de vez em quando, sob o mapa de mudança
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              No computador não há motor de vibração e o navegador não pode
+              mover o ponteiro real. Durante um tremor, o cursor do sistema é
+              escondido e um cursor desenhado treme no lugar, de 2 a 8 pixels,
+              seguindo o mesmo padrão (<code>CursorShake.js</code>). Com a
+              preferência de movimento reduzido ligada, isso não acontece.
+            </p>
+            <h3>Visão</h3>
+            <ul>
+              <li>
+                <b>Cor:</b> uma rampa única de intensidade, do verde-mar ao rosa
+                da buganvília, usada na trajetória, no perfil da linha do tempo
+                e nas categorias. A pluma vai do violeta de cinza ao laranja e
+                rosa incandescentes.
+              </li>
+              <li>
+                <b>Anéis no compasso:</b> a cada batida um anel de luz sai do
+                fenômeno e se espalha pela superfície, como a pele de um tambor
+                respondendo ao golpe. O primeiro tempo do compasso é o mais
+                brilhante.
+              </li>
+              <li>
+                <b>Varredura das luzes:</b> uma linha atravessa o mapa plano em
+                14 segundos, com um rastro suave; cada nota deixa um anel no
+                lugar do mapa que a gerou (dourado para lugares acesos, roxo
+                para mais luz, laranja para menos). É um canvas 2D, sem
+                Three.js, e a página pesa uma fração das outras.
+              </li>
+              <li>
+                <b>Sol real:</b> dia e noite no globo vêm do ponto subsolar
+                calculado para a data (aproximação de baixa precisão do
+                NOAA/USNO, erro de uma fração de grau).
+              </li>
+              <li>
+                <b>Osciloscópio:</b> a forma de onda e o espectro do som gerado
+                ficam visíveis no painel.
+              </li>
+              <li>
+                <b>Desempenho:</b> a cena mede o tempo médio de quadro a cada
+                segundo e ajusta a própria resolução (até 60% da original),
+                desligando o brilho difuso se ainda assim faltar fôlego. A
+                máquina de referência usa gráficos integrados.
+              </li>
+            </ul>
+          </section>
+
+          <!-- ============================================================ 10 -->
+          <section id="dados">
+            <h2>10. Dados e medições</h2>
+            <h3>EONET: trajetórias e magnitudes</h3>
+            <p>
+              <code>https://eonet.gsfc.nasa.gov/api/v3/events/{id}</code>. Cada
+              evento traz uma lista de pontos com data, coordenadas e magnitude.
+              Helene: <code>EONET_11304</code> (vento em nós).
+            </p>
+            <ul>
+              <li>
+                <b>Entre dois registros</b>, vento e posição são interpolados
+                linearmente.
+              </li>
+              <li>
+                <b>Deriva e rumo</b> são calculados entre registros pela
+                distância de círculo máximo (fórmula de haversine, raio de 6.371
+                km).
+              </li>
+              <li>
+                <b>Chegada à costa:</b> o toque do Helene na Flórida (27 set.
+                2024, 03:10 UTC, categoria 4) não está na trajetória da EONET;
+                vem do National Hurricane Center e a interface nomeia a fonte
+                quando fala disso.
+              </li>
+            </ul>
+
+            <h3>Earth Information Center: luzes da noite</h3>
+            <p>
+              Visualização “Change in Night Lights between 2012 and 2023” (<a
+                href="https://svs.gsfc.nasa.gov/5313/"
+                >SVS 5313</a
+              >), feita com o Black Marble: médias anuais de luz noturna do
+              instrumento VIIRS, no satélite Suomi NPP. A coleção original tem
+              quadros EXR de 7680 × 2160 pixels, de 20 a 35 MB cada, pesados
+              demais para um navegador; por isso foi cortado do vídeo do EIC um
+              quadro estável por ano, recortado em um mapa-múndi de 1600 × 900
+              (um quadro por ano e o mapa de mudança, 13 imagens em
+              <code>public/img/eic/nightlights</code>). A medição, feita no
+              navegador, está em <code>src/models/core/nightlights.js</code>.
+            </p>
+
+            <div id="eic-sources"></div>
+
+            <h3>GIBS: imagens de satélite</h3>
+            <p>
+              Serviço WMS em
+              <code>gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi</code>
+              (WMS 1.3.0, EPSG:4326).
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Camada</th>
+                    <th>Uso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <code>VIIRS_NOAA20_CorrectedReflectance_TrueColor</code>
+                    </td>
+                    <td>Quadro diário do Helene (fonte principal, 2.048 px)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code>MODIS_Aqua_…</code> e
+                      <code>MODIS_Terra_CorrectedReflectance_TrueColor</code>
+                    </td>
+                    <td>Preenchem as faixas sem dado do NOAA-20</td>
+                  </tr>
+                  <tr>
+                    <td><code>BlueMarble_ShadedRelief_Bathymetry</code></td>
+                    <td>Globo de dia</td>
+                  </tr>
+                  <tr>
+                    <td><code>VIIRS_Black_Marble</code></td>
+                    <td>Globo à noite (luzes das cidades)</td>
+                  </tr>
+                  <tr>
+                    <td><code>GOES-West_ABI_Band13_Clean_Infrared</code></td>
+                    <td>
+                      Infravermelho do Tonga, onde a pluma é medida (25 px por
+                      grau)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>GOES-West_ABI_GeoColor</code></td>
+                    <td>Imagem em cor do Tonga (50 px por grau)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li>
+                <b>Composição do Helene:</b> um quadro por dia; pixels pretos
+                (sem dado) do NOAA-20 são preenchidos com Aqua e depois Terra. A
+                troca entre dois dias acontece em uma janela curta, para a
+                tempestade nunca aparecer dobrada.
+              </li>
+              <li>
+                <b>Antimeridiano:</b> a região do Tonga cruza a linha de 180°, o
+                que um pedido WMS não faz. Ela é buscada em duas metades e
+                costurada no navegador.
+              </li>
+              <li>
+                <b>Varredura do GOES:</b> os quadros de disco inteiro levam o
+                nome da hora de início, mas varrem de norte a sul. Tonga (20° S)
+                é fotografado cerca de 6 minutos depois, então o quadro "04:10"
+                já mostra a explosão das 04:14. O modelo soma esse atraso.
+              </li>
+            </ul>
+
+            <h3>A pluma medida no navegador</h3>
+            <p>
+              É a única medição que o projeto faz por conta própria
+              (<code>core/plume.js</code>), em 15 quadros infravermelhos entre
+              03:50 e 08:00 UTC:
+            </p>
+            <ol>
+              <li>
+                Na renderização realçada da Banda 13, superfícies quentes são
+                cinza e topos frios de nuvem são coloridos. Um pixel é
+                <b>frio</b> quando a cor é saturada:
+                <code>max(R,G,B) − min(R,G,B) &gt; 50</code>.
+              </li>
+              <li>
+                A partir de uma janela de 25 × 25 pixels em volta do vulcão
+                (20,55° S, 175,39° O), um
+                <b>preenchimento por inundação</b> segue os pixels frios
+                vizinhos. Assim só entra a região conectada à erupção.
+              </li>
+              <li>
+                A busca para a 8 graus do vulcão, para tempestades distantes não
+                contarem.
+              </li>
+              <li>
+                Cada pixel soma a sua <b>área real</b>:
+                <code>Δlon × 111,32 × cos(lat) × Δlat × 110,57</code> km².
+              </li>
+              <li>
+                O <b>diâmetro</b> é o do círculo de mesma área:
+                <code>2 × √(área ÷ π)</code>.
+              </li>
+              <li>
+                O <b>índice do núcleo frio</b> é a fração de pixels em tons
+                vermelhos (<code>R &gt; 170</code> e <code>G &lt; 110</code>):
+                os topos mais frios, a coluna que ultrapassa a pluma.
+              </li>
+            </ol>
+            <p>
+              Entre dois quadros a pluma cresce linearmente, mas nunca antes da
+              hora da explosão. A velocidade da borda é metade da variação do
+              diâmetro por minuto.
+            </p>
+
+            <h3>Ao vivo, cópia local e modo sem rede</h3>
+            <p>
+              Toda chamada devolve o mesmo formato, com a origem:
+              <span class="tag tag--live">ao vivo</span> (a API respondeu) ou
+              <span class="tag tag--snap">cópia local</span> (resposta real
+              anterior, guardada em <code>public/data/</code> e
+              <code>public/img/gibs/</code>). Se a API falhar ou passar do tempo
+              limite (15 s para dados, 25 s para imagens), a cópia entra sozinha
+              e a interface mostra isso. Com <code>?local</code> no endereço, a
+              página nem tenta a rede: uma demonstração com internet ruim começa
+              na hora. A escolha vale para a aba inteira e acompanha os links
+              entre as páginas.
+            </p>
+            <p>
+              Os quadros do EIC (Luzes da noite) são sempre cópias locais, em
+              <code>public/img/eic/nightlights/</code>: os quadros do SVS têm de
+              20 a 35 MB cada, e a experiência não depende da rede.
+            </p>
+          </section>
+
+          <!-- ============================================================ 11 -->
+          <section id="fisica">
+            <h2>11. Física ao vivo</h2>
+            <p>
+              Calculada a cada instante a partir das medições, em
+              <code>core/physics.js</code>. Cada constante nomeia a fonte.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Grandeza</th>
+                    <th>Fórmula</th>
+                    <th>Constantes e fonte</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Pressão dinâmica do vento</td>
+                    <td><code>q = ½ · ρ · v²</code></td>
+                    <td>
+                      ρ = 1,15 kg/m³ (ar quente e úmido ao nível do mar); 1 kt =
+                      0,514444 m/s
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Empurrão em kg por m²</td>
+                    <td><code>q ÷ g</code></td>
+                    <td>g = 9,80665 m/s²</td>
+                  </tr>
+                  <tr>
+                    <td>Poder destrutivo relativo</td>
+                    <td><code>(v ÷ 64 kt)³</code></td>
+                    <td>
+                      A potência dissipada cresce com v³ (Emanuel, 2005); 1× é
+                      um furacão recém-formado
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensificação rápida</td>
+                    <td>vento sobe ≥ 30 kt em 24 h</td>
+                    <td>Critério do National Hurricane Center</td>
+                  </tr>
+                  <tr>
+                    <td>Categoria</td>
+                    <td>limiares em 34, 64, 83, 96, 113 e 137 kt</td>
+                    <td>Escala Saffir-Simpson de vento</td>
+                  </tr>
+                  <tr>
+                    <td>Comparações de área</td>
+                    <td>
+                      <code>área ÷ 1.521 km²</code> e <code>÷ 248.219 km²</code>
+                    </td>
+                    <td>Cidade e estado de São Paulo (IBGE)</td>
+                  </tr>
+                  <tr>
+                    <td>Área da pluma</td>
+                    <td><code>π · (d ÷ 2)²</code></td>
+                    <td>Diâmetro medido nos quadros</td>
+                  </tr>
+                  <tr>
+                    <td>Onda de pressão (Lamb)</td>
+                    <td><code>distância ÷ 315 m/s</code></td>
+                    <td>
+                      Velocidade medida no mundo todo (Matoza et al., 2022);
+                      partida às 04:14:45 UTC (USGS)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Altura máxima da pluma</td>
+                    <td>57 km (valor fixo, citado)</td>
+                    <td>Proud et al., 2022</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              <b>Onda de Lamb até São Paulo</b> (calculado agora, por esta
+              página): <span class="mono" id="lamb-km">—</span> km pelo círculo
+              máximo, <span class="mono" id="lamb-hours">—</span> horas de
+              viagem, chegada às <span class="mono" id="lamb-arrival">—</span>.
+              Uma volta completa na Terra leva
+              <span class="mono" id="lamb-lap">—</span> horas. A chegada é um
+              <span class="tag tag--mod">modelo</span>: o projeto não tem
+              registro da onda em barômetros brasileiros.
+            </p>
+          </section>
+
+          <!-- ============================================================ 12 -->
+          <section id="arquitetura">
+            <h2>12. Arquitetura</h2>
+            <p>
+              Site estático, sem backend. Vite com uma página HTML por
+              experiência, Three.js para a cena, Tone.js para o áudio, GSAP para
+              a linha do tempo e D3 para as rampas de cor.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Biblioteca</th>
+                    <th>Versão</th>
+                    <th>Para quê</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Vite</td>
+                    <td>8.3</td>
+                    <td>
+                      Servidor de desenvolvimento e empacotamento em várias
+                      páginas
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Three.js</td>
+                    <td>0.186</td>
+                    <td>Globo, nuvens, pluma, pós-processamento</td>
+                  </tr>
+                  <tr>
+                    <td>Tone.js</td>
+                    <td>15.1</td>
+                    <td>Síntese, transporte, efeitos e analisadores</td>
+                  </tr>
+                  <tr>
+                    <td>GSAP</td>
+                    <td>3.15</td>
+                    <td>Reprodução da linha do tempo e tremor de elementos</td>
+                  </tr>
+                  <tr>
+                    <td>D3</td>
+                    <td>7.9</td>
+                    <td>Interpolação de cores</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>Modelo, visão, controlador</h3>
+            <pre><code>src/
+├─ config/example.js        os eventos reais: ids, datas, regiões, cópias locais
+├─ models/                  sem DOM e sem áudio: só dados e funções puras
+│  ├─ core/music.js         escalas, graus, acordes e a regra jukebox()
+│  ├─ core/sotaque.js       os quatro estilos: limiares, grades rítmicas, frases
+│  ├─ core/physics.js       física derivada, com as fontes
+│  ├─ core/plume.js         medição da pluma nos pixels do infravermelho
+│  ├─ core/nightlights.js   medição da área acesa e do mapa de mudança
+│  ├─ core/frames.js        medição por tipo de pixel dos quadros do EIC (eic.html)
+│  ├─ core/solar.js         ponto subsolar e elevação do Sol
+│  ├─ SensoryMapper.js      dado → parâmetros de som, imagem e vibração
+│  ├─ HurricaneModel.js · EruptionModel.js · NightLightsModel.js · FramesModel.js
+│  └─ services/             eonet.js · gibs.js · http.js (ao vivo ou cópia)
+├─ controllers/             ligam modelo, visão e áudio; anunciam os marcos
+│  └─ ExperienceController.js   fluxo comum; um controlador por fenômeno o estende
+├─ views/
+│  ├─ pages/                a interface de cada página
+│  ├─ scenes/               cenas (globo, tempestade, erupção em 3D; mapas e globos em 2D dos quadros do EIC)
+│  ├─ sensory/              AudioEngine, vibração, cursor
+│  │  └─ voices/            HarmonyLayer, BrazilLayer e as vozes de cada fenômeno
+│  └─ shared/               mapeamento, osciloscópio, paleta, formatação
+├─ main/                    ponto de entrada de cada página
+└─ styles/                  tokens, base, componentes e páginas</code></pre>
+            <p>
+              O fluxo de um instante: o modelo emite o estado, o controlador
+              passa pelo <code>SensoryMapper</code> e entrega o resultado à
+              visão (painéis e cena) e à voz (áudio). Os modelos e o mapeador
+              são funções puras, sem DOM nem áudio, e é por isso que esta página
+              consegue importá-los para gerar as tabelas.
+            </p>
+            <h3>Rodar</h3>
+            <pre><code>npm install
+npm run dev        # desenvolvimento
+npm run build      # gera dist/
+npm run preview    # serve o resultado do build</code></pre>
+            <p>
+              Acrescente <code>?local</code> a qualquer endereço para usar só as
+              cópias locais dos dados.
+            </p>
+          </section>
+
+          <!-- ============================================================ 13 -->
+          <section id="acessibilidade">
+            <h2>13. Acessibilidade</h2>
+            <p>
+              Acessibilidade é o argumento central do desafio, não um extra. O
+              som é o canal principal de informação; a tela, a vibração e a voz
+              repetem o que ele diz.
+            </p>
+            <ul>
+              <li>
+                <b>Teste de olhos fechados:</b> na página do Helene, dois botões
+                tocam a categoria 1 (70 kt) e a categoria 5 (145 kt) por 3,5 s.
+                Se dá para distinguir sem olhar, o som está codificando o dado.
+                Durante o teste, a interface troca "medido" por "teste manual".
+              </li>
+              <li>
+                <b>Narração em voz:</b> os marcos (mudança de categoria,
+                instrumento que entra, ruptura e explosão) são narrados por uma
+                voz sintetizada pela ElevenLabs. Se o serviço não estiver
+                disponível, a narração usa a voz disponível no navegador. Com a
+                narração ligada, os avisos deixam de ser região viva para evitar
+                que o leitor de tela os anuncie novamente.
+              </li>
+              <li>
+                <b>Avisos em fila:</b> cada aviso espera a sua vez e fica tempo
+                suficiente para ser lido; um não atropela o outro.
+              </li>
+              <li>
+                <b>Movimento reduzido:</b> a preferência do sistema desliga
+                animações de interface e o tremor do cursor. A barra de
+                acessibilidade também tem um botão “Reduzir movimento” que faz o
+                mesmo à mão: ele marca <code>data-reduced-motion</code> no
+                documento HTML, e as transições e animações caem para
+                praticamente zero e a rolagem deixa de ser suave.
+              </li>
+              <li>
+                <b>Barra de acessibilidade:</b> fica no topo de todas as
+                páginas, agrupada e rotulada como “Acessibilidade”. Reúne o
+                tamanho da fonte, o movimento reduzido e a narração em voz. Os
+                botões de liga/desliga usam <code>aria-pressed</code> e mostram
+                o estado por escrito (ON/OFF), sem depender só de cor.
+              </li>
+              <li>
+                <b>Tamanho da fonte:</b> cinco níveis (90%, 100%, 110%, 120% e
+                130%). Os botões A− e A+ diminuem e aumentam o texto, e o botão
+                A restaura o tamanho normal.
+              </li>
+              <li>
+                <b>Volume:</b> as páginas com áudio têm, no dock ao lado do
+                botão de som, um menu de volume com “−”, um controle deslizante
+                e “+” (passos de 5%). O menu abre e fecha com <kbd>Esc</kbd>,
+                devolve o foco ao botão, e o nível é anunciado como “Volume:
+                75%”. O padrão, 70%, é a mistura como foi composta; acima disso
+                há até 6 dB de ganho extra (o limitador evita distorção). O
+                volume também vale para a narração em voz, é lembrado entre as
+                páginas e não afeta os gráficos de onda, que mostram o nível do
+                dado.
+              </li>
+              <li>
+                <b>Libras:</b> o plugin VLibras do governo federal é carregado
+                em todas as páginas e traduz o texto para a Língua Brasileira de
+                Sinais. Ele vem do domínio <code>vlibras.gov.br</code>, então
+                precisa de rede.
+              </li>
+              <li>
+                <b>Idioma:</b> O site abre em inglês e há um seletor de idioma.
+                O idioma escolhido é lembrado e o idioma da página acompanha a
+                troca, para que o leitor de tela use a pronúncia correta.
+              </li>
+              <li>
+                <b>Foco e alvos de toque:</b> todo controle interativo tem
+                contorno de foco amarelo de 3 px, visível sobre o fundo escuro,
+                e altura mínima de 44 px. O texto corrido usa entrelinha de 1,5.
+                A página de documentação tem um link “Pular para o conteúdo”.
+              </li>
+              <li>
+                <b>Painel de atalhos:</b> o botão “Atalhos” abre uma lista das
+                teclas (<code>aria-expanded</code> e <code>aria-controls</code>
+                indicam o estado). O foco vai para dentro do painel ao abrir,
+                <kbd>Esc</kbd> fecha e devolve o foco ao botão, e um clique fora
+                também fecha.
+              </li>
+              <li>
+                <b>Tipografia:</b> Atkinson Hyperlegible, desenhada para baixa
+                visão: nenhuma letra se confunde com outra.
+              </li>
+              <li>
+                <b>Preferências lembradas:</b> sotaque, narração, idioma,
+                tamanho da fonte e movimento reduzido ficam no
+                <code>localStorage</code> e valem para as experiências com
+                controles de áudio. Se o navegador bloquear o armazenamento, a
+                preferência vale só até sair da página e nada quebra.
+              </li>
+            </ul>
+            <h3>Teclado</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tecla</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>Espaço</kbd></td>
+                    <td>Tocar ou pausar</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>←</kbd> <kbd>→</kbd></td>
+                    <td>
+                      Voltar ou avançar (1 hora no furacão, 10 minutos no
+                      vulcão, 1 ano nas luzes da noite, um passo nos quadros do
+                      EIC)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td>
+                    <td>Câmeras</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd></td>
+                    <td>Regiões do mapa nas luzes da noite</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>B</kbd></td>
+                    <td>Alternar sotaque brasileiro e universal</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>N</kbd></td>
+                    <td>Narração em voz</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>M</kbd></td>
+                    <td>Ligar ou desligar o som</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>H</kbd></td>
+                    <td>Esconder ou mostrar os painéis</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>Esc</kbd></td>
+                    <td>Fechar o painel de detalhes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ============================================================ 14 -->
+          <section id="limites">
+            <h2>14. Limites e honestidade</h2>
+            <p>
+              O único compromisso fixado pelo time é usar só dados reais da NASA
+              e rotular todo o resto.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Rótulo</th>
+                    <th>Significa</th>
+                    <th>Exemplos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="tag tag--m">medido</span></td>
+                    <td>
+                      Veio de uma fonte oficial ou foi medido em imagem real
+                    </td>
+                    <td>
+                      Vento, posição, área, diâmetro da pluma, núcleo frio
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag--c">calculado</span></td>
+                    <td>Derivado de medições por uma fórmula declarada</td>
+                    <td>Deriva, expansão da borda, pressão, massa</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag--mod">modelo</span></td>
+                    <td>Previsão a partir de um valor medido em outro lugar</td>
+                    <td>Posição e chegada da onda de Lamb</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag--i">ilustrativo</span></td>
+                    <td>Desenhado para dar vida à cena, sem dado por trás</td>
+                    <td>
+                      Relâmpagos (taxa estimada pelo vento ou pela expansão)
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>O que não existe</h3>
+            <ul>
+              <li>
+                Testes com usuários, depoimentos ou medição de acessibilidade
+                com pessoas cegas ou com baixa visão. As escolhas se apoiam na
+                literatura, não em estudo próprio.
+              </li>
+              <li>
+                Meta formal de acessibilidade (um nível WCAG, por exemplo).
+              </li>
+              <li>
+                Dados de relâmpagos e registro da onda de pressão em barômetros
+                brasileiros.
+              </li>
+              <li>
+                Temperatura da água medida: a latitude é usada como aproximação.
+              </li>
+              <li>
+                Radiância calibrada nas luzes da noite: os quadros do EIC são
+                imagens de visualização, então a medida só compara um ano com
+                outro.
+              </li>
+              <li>
+                A coleção completa de quadros do EIC no navegador: as luzes da
+                noite usam 12 quadros cortados do vídeo oficial, um por ano.
+              </li>
+              <li>
+                As notas do time sobre sinestesia, que deram origem ao primeiro
+                mapeamento, não estão no repositório.
+              </li>
+            </ul>
+            <h3>Decisões estéticas, não científicas</h3>
+            <p>
+              A tonalidade, o modo menor, os timbres, as frases melódicas e a
+              escolha de qual gênero vai com qual fenômeno são decisões de
+              composição. A ciência está em <em>o que</em> controla a música (a
+              medição) e em <em>quando</em> os instrumentos entram (os
+              limiares). Os instrumentos são sintetizados, mas isso não é um
+              compromisso: as músicas de fundo do Suno que tocam por baixo já
+              são gravadas.
+            </p>
+          </section>
+
+          <!-- ============================================================ 15 -->
+          <section id="referencias">
+            <h2>15. Referências</h2>
+            <h3>Citadas na interface e no código</h3>
+            <ul class="refs">
+              <li>
+                Dubus, G.; Bresin, R. (2013). A systematic review of mapping
+                strategies for the sonification of physical quantities.
+                <i>PLoS ONE</i>, 8(12), e82491.
+                <span
+                  >Base para usar a altura da nota como dimensão principal e o
+                  espaço sonoro para grandezas de posição.</span
+                >
+              </li>
+              <li>
+                Spence, C. (2011). Crossmodal correspondences: a tutorial
+                review.
+                <i>Attention, Perception, &amp; Psychophysics</i>, 73(4),
+                971–995.
+                <span>Base para agudo = mais e rápido = veloz.</span>
+              </li>
+              <li>
+                Emanuel, K. (2005). Increasing destructiveness of tropical
+                cyclones over the past 30 years. <i>Nature</i>, 436, 686–688.
+                <span>Potência dissipada proporcional a v³.</span>
+              </li>
+              <li>
+                Matoza, R. S. et al. (2022). Atmospheric waves and global
+                seismoacoustic observations of the January 2022 Hunga eruption,
+                Tonga. <i>Science</i>, 377(6601), 95–100.
+                <span>Velocidade da onda de Lamb.</span>
+              </li>
+              <li>
+                Proud, S. R.; Prata, A. T.; Schmauß, S. (2022). The January 2022
+                eruption of Hunga Tonga-Hunga Ha'apai volcano reached the
+                mesosphere. <i>Science</i>, 378(6619), 554–557.
+                <span>Altura de 57 km.</span>
+              </li>
+              <li>
+                National Hurricane Center (NOAA). Glossário:
+                <i>rapid intensification</i>; escala Saffir-Simpson de vento;
+                relatório do ciclone tropical Helene (2024).
+                <span
+                  >Critério de 30 kt em 24 h, limiares das categorias e chegada
+                  à costa.</span
+                >
+              </li>
+              <li>
+                USGS. Hora de início da explosão principal do Hunga Tonga-Hunga
+                Ha'apai, 15 jan. 2022, 04:14:45 UTC.
+              </li>
+              <li>
+                IBGE. Áreas territoriais do município e do estado de São Paulo.
+              </li>
+            </ul>
+            <h3>Dados</h3>
+            <ul class="refs">
+              <li>
+                NASA EONET, Earth Observatory Natural Event Tracker, API v3.
+                <span>eonet.gsfc.nasa.gov</span>
+              </li>
+              <li>
+                NASA GIBS, Global Imagery Browse Services, WMS.
+                <span>gibs.earthdata.nasa.gov</span>
+              </li>
+              <li id="eic-refs-anchor" hidden></li>
+              <li>
+                NASA Scientific Visualization Studio. Change in Night Lights
+                between 2012 and 2023, EIC Version (SVS 5313), 14 jun. 2024.
+                Visualizador: Kel Elkins (USRA). Cientistas: Zhuosen Wang,
+                Miguel Román, Ranjay Shrestha, Srija Chakraborty e Virginia
+                Kalb. <span>svs.gsfc.nasa.gov/5313</span>
+              </li>
+              <li>
+                NOAA GOES-West (ABI), NOAA-20 (VIIRS), NASA Aqua e Terra
+                (MODIS), Blue Marble e Black Marble. <span>Via GIBS.</span>
+              </li>
+            </ul>
+            <h3>Tecnologia</h3>
+            <ul class="refs">
+              <li>Tone.js · Three.js · GSAP · D3 · Vite.</li>
+              <li>
+                W3C: Web Audio API, Vibration API, Web Speech API, Audio Session
+                API.
+              </li>
+              <li>
+                Atkinson Hyperlegible (Braille Institute), Bricolage Grotesque,
+                Space Grotesk e Inter, via Google Fonts.
+              </li>
+            </ul>
+            <h3>Leitura complementar</h3>
+            <p class="aside">
+              Não são citadas na interface. Estão aqui para quem quiser
+              aprofundar os temas desta página.
+            </p>
+            <ul class="refs">
+              <li>
+                Deroy, O.; Spence, C. (2013). Why we are not all synesthetes
+                (not even weakly so). <i>Psychonomic Bulletin &amp; Review</i>,
+                20, 643–664.
+                <span>A diferença entre sinestesia e correspondências.</span>
+              </li>
+              <li>
+                Hermann, T.; Hunt, A.; Neuhoff, J. G. (orgs.) (2011).
+                <i>The Sonification Handbook</i>. Berlim: Logos.
+                <span>Referência geral de sonificação.</span>
+              </li>
+              <li>
+                Walker, B. N. (2002). Magnitude estimation of conceptual data
+                dimensions for use in sonification.
+                <i>Journal of Experimental Psychology: Applied</i>, 8(4),
+                211–221.
+                <span>Polaridade dos mapeamentos: quando agudo é "mais".</span>
+              </li>
+              <li>
+                Eitan, Z.; Granot, R. Y. (2006). How music moves: musical
+                parameters and listeners' images of motion.
+                <i>Music Perception</i>, 23(3), 221–247.
+                <span>Altura, andamento e a sensação de movimento.</span>
+              </li>
+            </ul>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script type="module" src="/src/main/docs.js"></script>
+    <script type="module" src="/src/components/site-header.js"></script>
+
+    <footer class="mt-[clamp(48px,8vw,128px)] border-t border-steel text-fog">
+      <div
+        class="mx-auto flex max-w-[1600px] items-start justify-between gap-6 px-page py-[clamp(28px,4vw,56px)] max-[560px]:flex-col"
+      >
+        <div class="grid gap-3 text-[clamp(16px,1.5vw,20px)]">
+          <p>Projeto desenvolvido pelo time ENTERPRISE para o NASA Space Apps 2026.</p>
+          <a
+            class="inline-flex min-h-11 items-center font-bold text-frost underline underline-offset-4 hover:text-brand-yellow"
+            href="/index.html"
+            >Ver os fenômenos ↗</a
+          >
+        </div>
+        <a
+          class="grid justify-items-center gap-2 text-base text-mist no-underline hover:text-brand-yellow max-[560px]:justify-items-start"
+          href="#top"
+          aria-label="Voltar ao topo"
+        >
+          <span
+            class="flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-current text-3xl font-normal"
+            aria-hidden="true"
+            >↑</span
+          >
+          Volte ao topo
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>

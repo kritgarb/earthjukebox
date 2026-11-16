@@ -1,0 +1,583 @@
+/* This file is @imported into main.css (not a separate <link>), so it shares that file's
+   Tailwind context directly and needs no @reference. Converted to @apply; only pseudo-elements,
+   clip-path shapes and structural (nth-child) selectors that no utility class can reach stay as
+   plain declarations, and the two-layer order (shared base, then the Brazilian skin override)
+   is kept exactly as it was so the cascade still resolves the same way. */
+
+/* Page title ----------------------------------------------------- */
+.language-switcher {
+  @apply fixed top-3 right-3 z-[10000];
+}
+
+.language-switcher select {
+  @apply max-w-[132px] min-h-9 rounded-[9px] border border-line-strong bg-glass-strong px-[10px] py-[6px] pr-[30px] font-body text-xs font-semibold text-ink;
+  cursor: pointer;
+}
+
+.language-switcher select:focus-visible {
+  @apply outline-2 outline-ipe outline-offset-[3px];
+}
+
+.page-title {
+  @apply font-display text-[clamp(24px,2.2vw,30px)] leading-[1.05] font-bold tracking-[-0.015em];
+}
+
+/* Panel ---------------------------------------------------------- */
+.panel {
+  @apply grid gap-3 rounded-brand border border-line bg-glass p-4;
+}
+
+.panel__head {
+  @apply flex flex-wrap items-center justify-between gap-x-3 gap-y-2;
+}
+
+.panel__title {
+  @apply font-display text-[15px] leading-[1.25] font-semibold;
+}
+
+.panel__note {
+  @apply text-[12.5px] leading-[1.55] text-ink-2;
+}
+
+.panel__note strong {
+  @apply font-medium text-ink;
+}
+
+/* Status pill ---------------------------------------------------- */
+.status {
+  @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-[9px] py-[5px] font-mono text-[10.5px] leading-none font-medium tracking-[0.06em] text-ink-3 uppercase;
+  border-color: currentColor;
+}
+
+.status::before {
+  content: "";
+  @apply h-1.5 w-1.5 rounded-full;
+  background: currentColor;
+}
+
+.status[data-state="live"] {
+  @apply text-live;
+}
+.status[data-state="snapshot"] {
+  @apply text-snapshot;
+}
+.status[data-state="estimate"] {
+  @apply text-estimate;
+}
+.status[data-state="error"] {
+  @apply text-heat;
+}
+.status[data-state="loading"]::before {
+  animation: blink 1.1s infinite;
+}
+
+/* Readouts ------------------------------------------------------- */
+.readouts {
+  @apply grid grid-cols-2 gap-2;
+}
+
+.readout {
+  @apply grid min-w-0 gap-[5px] rounded-brand-sm border border-line bg-[rgba(255,236,190,0.05)] px-3 py-[10px];
+}
+
+.readout__label {
+  @apply font-mono text-[10px] leading-[1.2] font-medium tracking-[0.12em] text-ink-3 uppercase;
+}
+
+.readout__value {
+  @apply overflow-hidden font-mono text-xl leading-none font-medium whitespace-nowrap;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+}
+
+.readout__unit {
+  @apply ml-1 text-xs text-ink-3;
+}
+
+/* Category badge (Saffir-Simpson) -------------------------------- */
+.category {
+  @apply inline-flex items-center justify-self-start gap-2 rounded-full border border-line bg-[rgba(255,236,190,0.06)] py-1 pr-[10px] pl-1 font-mono text-xs leading-none font-medium;
+}
+
+.category__code {
+  @apply grid min-w-[30px] h-[22px] place-items-center rounded-full px-[6px] font-semibold text-night-ink transition-[background] duration-400;
+  background: var(--cat-color, var(--color-ice));
+}
+
+.category__label {
+  @apply text-ink-2;
+}
+
+/* Mapping list --------------------------------------------------- */
+.mapping {
+  @apply grid list-none gap-3 m-0 p-0;
+}
+
+.mapping__row {
+  @apply grid gap-x-[10px] gap-y-[3px];
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.mapping__from,
+.mapping__to {
+  @apply text-[12.5px];
+}
+
+.mapping__from {
+  @apply text-ink-2;
+}
+
+.mapping__to::before {
+  content: "\2192\00a0";
+  @apply text-ink-3;
+}
+
+.mapping__value,
+.mapping__out {
+  @apply text-right font-mono text-[12.5px] leading-[1.4] font-medium;
+  font-variant-numeric: tabular-nums;
+  max-width: 14rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.mapping__from,
+.mapping__to {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.mapping__out {
+  @apply text-ice;
+}
+
+.mapping__bar {
+  @apply col-span-full h-[3px] overflow-hidden rounded-[2px] bg-[rgba(255,236,190,0.1)];
+}
+
+.mapping__bar > span {
+  @apply block h-full w-0 bg-gradient-to-r from-ice to-storm transition-[width] duration-[250ms] ease-out;
+}
+
+/* Buttons -------------------------------------------------------- */
+.btn {
+  @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-brand-sm border border-line-strong bg-[rgba(255,236,190,0.06)] px-4 font-body text-[13px] leading-none font-medium text-ink transition-[background,border-color,color] duration-150;
+  cursor: pointer;
+}
+
+.btn:hover {
+  @apply border-[rgba(255,210,63,0.55)] bg-[rgba(255,236,190,0.13)];
+}
+
+.btn:disabled {
+  @apply opacity-45;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  @apply border-ice bg-ice text-night-ink;
+}
+
+.btn--primary:hover {
+  @apply border-[#ffe27a] bg-[#ffe27a];
+}
+
+.btn[aria-pressed="true"] {
+  @apply border-storm bg-[rgba(255,122,26,0.16)] text-[#ffe1c4];
+}
+
+.btn--block {
+  @apply w-full;
+}
+
+.icon {
+  @apply h-3 w-[11px] flex-shrink-0;
+  background: currentColor;
+}
+
+.icon--play {
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.icon--pause {
+  clip-path: polygon(
+    0 0,
+    35% 0,
+    35% 100%,
+    0 100%,
+    0 0,
+    65% 0,
+    100% 0,
+    100% 100%,
+    65% 100%,
+    65% 0
+  );
+}
+
+/* Transport icons are masks, so they take the button's text colour. */
+.icon--sound,
+.icon--volume-down,
+.icon--volume-up {
+  @apply h-[18px] w-[18px];
+  mask: center / contain no-repeat;
+  -webkit-mask: center / contain no-repeat;
+}
+
+/* Sound off: a muted speaker (click to turn on). Sound on: a stop square (click to stop). */
+.icon--sound {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath fill='none' d='M16 9.5l5 5M21 9.5l-5 5'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath fill='none' d='M16 9.5l5 5M21 9.5l-5 5'/%3E%3C/svg%3E");
+}
+
+.btn[aria-pressed="true"] .icon--sound {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='6' y='6' width='12' height='12' rx='2'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='6' y='6' width='12' height='12' rx='2'/%3E%3C/svg%3E");
+}
+
+.icon--volume-down {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath fill='none' d='M15.5 9.5a4 4 0 0 1 0 5'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath fill='none' d='M15.5 9.5a4 4 0 0 1 0 5'/%3E%3C/svg%3E");
+}
+
+.icon--volume-up {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath fill='none' d='M15.5 9.5a4 4 0 0 1 0 5M18.5 6.5a8 8 0 0 1 0 11'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath fill='none' d='M15.5 9.5a4 4 0 0 1 0 5M18.5 6.5a8 8 0 0 1 0 11'/%3E%3C/svg%3E");
+}
+
+/* Volume (dock): lower, level, raise. */
+.volume {
+  @apply inline-flex items-center gap-1;
+}
+
+.volume.is-muted .volume__value {
+  @apply opacity-45;
+}
+
+.volume__value {
+  @apply min-w-[3ch] text-center font-mono text-xs font-medium text-ink-2;
+}
+
+.volume__step {
+  @apply min-h-11 w-11 flex-shrink-0 p-0;
+}
+
+.btn[aria-pressed="true"] .icon--play {
+  clip-path: polygon(
+    0 0,
+    35% 0,
+    35% 100%,
+    0 100%,
+    0 0,
+    65% 0,
+    100% 0,
+    100% 100%,
+    65% 100%,
+    65% 0
+  );
+}
+
+.btn-row {
+  @apply flex flex-wrap gap-2;
+}
+
+/* Segmented control --------------------------------------------- */
+.segmented {
+  @apply flex flex-wrap gap-1;
+}
+
+.segmented button {
+  @apply min-h-[34px] min-w-[38px] flex-1 rounded-[6px] border border-line bg-[rgba(255,236,190,0.05)] px-2 font-mono text-[11.5px] leading-none font-medium text-ink-2;
+  cursor: pointer;
+}
+
+.segmented button:hover {
+  @apply border-line-strong text-ink;
+}
+
+.segmented button[aria-pressed="true"] {
+  @apply border-ice bg-[rgba(255,210,63,0.14)] text-ink;
+}
+
+/* Range ---------------------------------------------------------- */
+.range {
+  @apply m-0 h-[22px] w-full appearance-none bg-transparent;
+  cursor: pointer;
+}
+
+.range::-webkit-slider-runnable-track {
+  @apply h-1 rounded-[2px];
+  background: linear-gradient(
+    90deg,
+    var(--color-ice) var(--fill, 0%),
+    rgba(255, 236, 190, 0.16) var(--fill, 0%)
+  );
+}
+
+.range::-moz-range-track {
+  @apply h-1 rounded-[2px] bg-[rgba(255,236,190,0.16)];
+}
+
+.range::-moz-range-progress {
+  @apply h-1 rounded-[2px] bg-ice;
+}
+
+.range::-webkit-slider-thumb {
+  @apply h-4 w-4 appearance-none rounded-full border-[3px] border-space bg-ink;
+  margin-top: -6px;
+  box-shadow: 0 0 0 1px var(--color-ice);
+}
+
+.range::-moz-range-thumb {
+  @apply h-3 w-3 rounded-full border-[3px] border-space bg-ink;
+  box-shadow: 0 0 0 1px var(--color-ice);
+}
+
+/* Scope ---------------------------------------------------------- */
+.scope {
+  @apply block h-[72px] w-full rounded-brand-sm border border-line bg-black/38;
+}
+
+/* Haptic cursor (desktop stand-in for vibration) ---------------- */
+.is-cursor-shaking,
+.is-cursor-shaking * {
+  cursor: none !important;
+}
+
+.haptic-cursor {
+  @apply pointer-events-none fixed top-0 left-0 z-[10000] h-6 w-6;
+  will-change: transform;
+}
+
+.haptic-cursor[hidden] {
+  @apply hidden;
+}
+
+.haptic-cursor svg {
+  @apply block;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* Wind hero readout --------------------------------------------- */
+.wind {
+  @apply grid gap-1;
+}
+
+.wind__value {
+  @apply flex items-baseline gap-[6px] font-mono text-[52px] leading-[0.95] font-semibold tracking-[-0.04em] text-ink transition-[text-shadow] duration-400;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 28px color-mix(in srgb, var(--cat-color, var(--color-ice)) 45%, transparent);
+}
+
+.wind__unit {
+  @apply text-base font-medium tracking-normal transition-colors duration-400;
+  color: var(--cat-color, var(--color-ice));
+}
+
+.wind__sub {
+  @apply text-xs text-ink-3;
+}
+
+/* Saffir-Simpson strip ------------------------------------------ */
+.scale {
+  @apply relative flex gap-0.5 pt-2;
+}
+
+.scale__seg {
+  @apply grid h-[18px] min-w-0 basis-0 place-items-center overflow-hidden rounded-[3px] font-mono text-[9.5px] leading-none font-semibold tracking-[0.04em] transition-[background,color] duration-300;
+  background: color-mix(in srgb, var(--seg-color) 16%, transparent);
+  color: color-mix(in srgb, var(--seg-color) 70%, var(--color-ink-3));
+}
+
+.scale__seg.is-active {
+  @apply text-night-ink;
+  background: var(--seg-color);
+}
+
+.scale__marker {
+  @apply absolute top-0 h-0 w-0 -translate-x-1/2 border-[5px] border-transparent border-b-0 border-t-[6px] border-t-ink transition-[left] duration-[250ms] ease-out;
+  left: var(--marker, 0%);
+}
+
+/* ================================================================ Brazilian skin
+   Organic corners, garden colours and plain-spoken labels over the shared components. */
+.page-title {
+  @apply font-display text-[clamp(26px,2.3vw,32px)] leading-none font-bold tracking-[-0.025em];
+}
+
+.panel {
+  @apply border-line p-[18px] shadow-[0_18px_40px_-28px_rgba(0,0,0,0.8)];
+}
+
+/* Each column of panels leans its corners the other way, like leaves on a stem. */
+.hud > .panel:nth-child(even) {
+  @apply rounded-leaf;
+}
+
+.panel__title {
+  @apply font-display text-[17px] leading-[1.2] font-bold tracking-[-0.01em];
+}
+
+.panel__note {
+  @apply text-[13.5px];
+}
+
+.status {
+  @apply px-[10px] py-[5px] font-body text-[11.5px] font-semibold tracking-normal normal-case;
+}
+
+.readout {
+  @apply border-transparent bg-[rgba(255,236,190,0.06)];
+}
+
+.readout:nth-child(4n + 2),
+.readout:nth-child(4n + 3) {
+  @apply rounded-step;
+}
+
+.readout__label {
+  @apply font-body text-xs font-semibold tracking-normal text-ink-3 normal-case;
+}
+
+.readout__value {
+  @apply font-semibold;
+}
+
+.category {
+  @apply font-body text-[13px] leading-none font-semibold;
+}
+
+.category__code {
+  @apply font-mono;
+}
+
+.mapping__from,
+.mapping__to {
+  @apply text-[13px];
+}
+
+.mapping__out {
+  @apply text-ipe;
+}
+
+.mapping__bar {
+  @apply h-[5px] rounded-full;
+}
+
+.mapping__bar > span {
+  @apply rounded-full;
+  background: linear-gradient(90deg, var(--color-mar), var(--color-mata) 35%, var(--color-ipe) 65%, var(--color-urucum));
+}
+
+.btn {
+  @apply min-h-[42px] rounded-full border-line-strong bg-[rgba(255,236,190,0.08)] px-[18px] font-body text-sm font-semibold;
+}
+
+.btn:hover {
+  @apply border-ipe bg-[rgba(255,236,190,0.16)];
+}
+
+.btn--primary {
+  @apply border-ipe bg-ipe text-night-ink;
+}
+
+.btn--primary:hover {
+  @apply border-[#ffe27a] bg-[#ffe27a];
+}
+
+.btn[aria-pressed="true"] {
+  @apply border-urucum bg-urucum text-night-ink;
+}
+
+.segmented {
+  @apply gap-0 rounded-full bg-[rgba(255,236,190,0.07)] p-[3px];
+}
+
+.segmented button {
+  @apply min-h-9 rounded-full border-transparent bg-transparent font-body text-[12.5px] font-semibold;
+}
+
+.segmented button:hover {
+  @apply border-transparent text-ink;
+}
+
+.segmented button[aria-pressed="true"] {
+  @apply border-ipe bg-ipe text-night-ink;
+}
+
+.range::-webkit-slider-runnable-track {
+  @apply h-[6px] rounded-full;
+}
+
+.range::-webkit-slider-thumb {
+  @apply h-5 w-5 border-space-2 bg-ipe;
+  margin-top: -7px;
+  box-shadow: 0 0 0 2px var(--color-ipe);
+}
+
+.range::-moz-range-thumb {
+  @apply bg-ipe;
+  box-shadow: 0 0 0 2px var(--color-ipe);
+}
+
+.scope {
+  @apply h-[76px] border-transparent bg-[rgba(10,17,40,0.6)];
+}
+
+.wind__value {
+  @apply font-display text-[60px] font-extrabold tracking-[-0.045em];
+}
+
+.wind__unit {
+  @apply font-body font-bold;
+}
+
+.scale__seg {
+  @apply h-5 rounded-full text-[10px];
+}
+
+/* Where a row's input comes from: the word carries it, the shape only backs it up. */
+.mapping__kind {
+  @apply ml-1 inline-block rounded-full border border-line-strong px-[7px] py-px align-[1px] font-body text-[11px] leading-[1.4] font-semibold whitespace-nowrap text-ink-2;
+}
+
+.mapping__kind[data-kind="medido"] {
+  @apply border-transparent px-0 text-live;
+}
+
+.mapping__kind[data-kind="ilustrativo"] {
+  @apply border-dashed border-estimate text-[#d8c9ff];
+}
+
+.mapping__kind.is-manual {
+  @apply text-urucum;
+}
+
+/* Carousel of cards: a native scroll-snap track (swipe, wheel and keyboard focus just work),
+   with prev/next buttons added by src/components/carousel.js. */
+.carousel {
+  --carousel-gap: clamp(20px, 3.2vw, 48px);
+  display: flex;
+  gap: var(--carousel-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* Room for the hover lift and shadow of a card, which overflow would otherwise clip. */
+  padding-block: 12px 40px;
+  margin-block: -12px -40px;
+}
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+.carousel > li {
+  flex: 0 0 calc((100% - var(--carousel-gap)) / 2);
+  scroll-snap-align: start;
+  scroll-margin-inline: 4px;
+}
+@media (max-width: 700px) {
+  .carousel > li {
+    /* Part of the next card shows, hinting that there is more to swipe. */
+    flex-basis: 86%;
+  }
+}

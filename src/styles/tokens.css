@@ -1,0 +1,84 @@
+/* Brazilian palette: a tropical night for the sky behind the scenes, and the colours of a
+   Burle Marx garden on top of it. The old names (ice, storm, heat) are kept as roles:
+   ice = main accent, storm = active or warm, heat = alert.
+   Every value below is a Tailwind v4 theme token: --color-* makes bg-ice/text-ice/border-ice
+   etc., --font-* makes font-display/font-body/..., --radius-* makes rounded-radius/... (the
+   hand-cut four-corner shorthand works as a single border-radius value). */
+@theme {
+  --color-space: #0a1128;
+  --color-space-2: #121c3d;
+  --color-anil: #1e2a52;
+  --color-glass: rgba(10, 17, 40, 0.9);
+  --color-glass-strong: rgba(10, 17, 40, 0.94);
+  --color-line: rgba(255, 236, 190, 0.16);
+  --color-line-strong: rgba(255, 236, 190, 0.36);
+
+  --color-ink: #fff4dc;
+  --color-ink-2: #d5cbe9;
+  --color-ink-3: #a199c8;
+  --color-night-ink: #0a1128;
+
+  --color-ipe: #ffd23f;
+  --color-urucum: #3dbefb; /* era laranja; o laranja saiu da paleta */
+  --color-bougainvillea: #ff2e7e;
+  --color-mata: #1fc46b;
+  --color-mar: #19c3c9;
+
+  --color-ice: var(--color-ipe);
+  --color-storm: var(--color-urucum);
+  --color-heat: var(--color-bougainvillea);
+
+  --color-live: #3ddc84;
+  --color-snapshot: #ffd23f;
+  --color-estimate: #b79cff;
+
+  /* The Jukebox redesign's own typography (Home page chrome: nav, hero, sections). Kept apart
+     from font-display/font-body so it never leaks into the phenomenon cards or the other
+     pages, which keep reading in Bricolage Grotesque + Atkinson Hyperlegible. */
+  --color-deep-space: #0a1128;
+  --color-navy-900: #121c3d;
+  --color-navy-800: #1e2a52;
+  /* Paleta final do Figma (Style Guide › colors, Mode 1.tokens.json, 15/11/2026). */
+  --color-brand-blue: #1a92ca;
+  --color-brand-blue-100: #d6e0ff;
+  --color-brand-green: #20c45c;
+  --color-card-blue: #3dbdff;
+  --color-brand-yellow: #ffd33f;
+  --color-fog: #c5cce0;
+  --color-fog-2: #8f99ba;
+  --color-steel: #5b6791;
+  --color-slate: #3a4672;
+  --color-mist: #e3e7f2;
+  --color-frost: #f2f4fa;
+
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  /* Atkinson Hyperlegible was drawn for low-vision readers: every letter is hard to confuse. */
+  --font-body: "Atkinson Hyperlegible Next", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, Consolas, monospace;
+  --font-head: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-prose: "Inter", "Segoe UI", system-ui, sans-serif;
+
+  /* Corners cut by hand, never four equal ones: rounded-brand, rounded-brand-sm... */
+  --radius-brand: 26px 16px 28px 18px;
+  --radius-brand-sm: 15px 10px 16px 11px;
+  --radius-blob-a: 62% 38% 54% 46% / 48% 58% 42% 52%;
+  --radius-blob-b: 41% 59% 37% 63% / 57% 44% 56% 43%;
+  --radius-blob-c: 55% 45% 62% 38% / 40% 52% 48% 60%;
+  --radius-leaf: 16px 28px 18px 26px;
+  --radius-card: 44px 24px 48px 28px;
+  --radius-card-media: 20px 64px 140px 72px;
+  --radius-dock: 30px 22px 32px 24px;
+  --radius-step: 10px 16px 11px 15px;
+
+  --spacing-gutter: clamp(16px, 2.4vw, 28px);
+  /* Home: margem lateral da página e respiro vertical entre seções, ambos fluidos. */
+  --spacing-page: clamp(16px, 5.8vw, 88px);
+  --spacing-section: clamp(80px, 11vw, 160px);
+}
+
+:root {
+  color-scheme: dark;
+
+  /* The Copacabana promenade wave, as a mask to be filled with any colour. */
+  --wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='48' viewBox='0 0 160 48'%3E%3Cpath d='M0 12C40-12 40 36 80 12S120 36 160 12V36C120 60 120 12 80 36S40 12 0 36Z'/%3E%3C/svg%3E");
+}

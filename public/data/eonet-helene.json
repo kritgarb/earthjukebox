@@ -1,0 +1,170 @@
+{
+	"id": "EONET_11304",
+	"title": "Hurricane Helene",
+	"description": null,
+	"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_11304",
+	"closed": "2024-10-03T00:00:00Z",
+		"categories": [
+			{
+			"id": "severeStorms",
+			"title": "Severe Storms"
+		}
+
+						],
+		"sources": [
+			{
+			"id": "Earthdata",
+			"url": "https://earthdata.nasa.gov/worldview/worldview-image-archive/hurricane-john-hurricane-helene"
+		},
+
+					{
+			"id": "EO",
+			"url": "https://earthobservatory.nasa.gov/images/event/153404/hurricane-helene"
+		},
+
+					{
+			"id": "NOAA_NHC",
+			"url": "https://www.nhc.noaa.gov/archive/2024/HELENE.shtml"
+		}
+
+						
+	],
+		"geometry": [
+			{
+					"magnitudeValue": 40.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-24T15:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -84.3, 19.5 ]
+					},
+
+					{
+					"magnitudeValue": 45.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-24T21:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -84.7, 19.7 ]
+					},
+
+					{
+					"magnitudeValue": 50.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-25T03:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -85.5, 19.9 ]
+					},
+
+					{
+					"magnitudeValue": 55.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-25T09:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -86.2, 20.7 ]
+					},
+
+					{
+					"magnitudeValue": 70.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-25T15:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -86.3, 21.6 ]
+					},
+
+					{
+					"magnitudeValue": 75.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-25T21:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -86.6, 22.5 ]
+					},
+
+					{
+					"magnitudeValue": 75.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-26T03:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -86.6, 23.1 ]
+					},
+
+					{
+					"magnitudeValue": 80.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-26T09:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -86.2, 24.2 ]
+					},
+
+					{
+					"magnitudeValue": 90.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-26T15:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -85.5, 25.5 ]
+					},
+
+					{
+					"magnitudeValue": 110.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-26T21:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -84.6, 27.9 ]
+					},
+
+					{
+					"magnitudeValue": 120.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-27T03:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -83.9, 29.9 ]
+					},
+
+					{
+					"magnitudeValue": 60.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-27T09:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -83, 32.8 ]
+					},
+
+					{
+					"magnitudeValue": 40.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-27T15:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -83.8, 35.1 ]
+					},
+
+					{
+					"magnitudeValue": 30.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-27T21:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -85.5, 37.5 ]
+					},
+
+					{
+					"magnitudeValue": 25.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-28T03:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -87, 38 ]
+					},
+
+					{
+					"magnitudeValue": 20.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-28T09:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -87.9, 37.3 ]
+					},
+
+					{
+					"magnitudeValue": 15.00,
+			"magnitudeUnit": "kts",
+			"date": "2024-09-28T15:00:00Z",
+			"type": "Point", 
+					"coordinates": [ -87.4, 36.6 ]
+					}
+
+				]
+}

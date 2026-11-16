@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a1128" />
+    <title>A explosão do Tonga · Earth Jukebox</title>
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/accessibility.css" />
+    <link rel="stylesheet" href="/src/styles/pages/sintonize.css" />
+  </head>
+  <body id="top" class="page-sintonize theme-fire is-intro">
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <div class="stage" id="stage" aria-hidden="true"></div>
+
+    <div class="reticle" id="reticle" aria-hidden="true" hidden>
+      <span class="reticle__ring"></span>
+      <span class="reticle__label" id="reticle-label">—</span>
+    </div>
+
+    <div class="hud-top" aria-live="off">
+      <span class="hud-top__time mono" id="hud-time">—</span>
+      <span class="hud-top__chip" id="hud-sun">—</span>
+      <span class="hud-top__chip" id="hud-frame">—</span>
+    </div>
+
+    <main class="layout" id="conteudo" tabindex="-1">
+      <p class="visually-hidden">
+        Descrição da cena: imagens de satélite infravermelho mostram a pluma da
+        erupção do vulcão Hunga Tonga em 15 de janeiro de 2022 se expandindo. O
+        som acompanha o diâmetro da pluma e a velocidade da expansão.
+      </p>
+      <aside class="hud hud--left" aria-label="Dados do evento">
+        <section data-tab="sobre" class="panel">
+          <p class="eyebrow">Vulcão · GOES-West via GIBS</p>
+          <h2 class="page-title">Ouça a maior explosão do século</h2>
+          <p class="panel__note">
+            Em 15 de janeiro de 2022 o vulcão submarino Hunga Tonga explodiu. O
+            satélite GOES-West fotografou a pluma a cada 10 minutos; o tamanho
+            dela é medido nessas imagens, aqui no seu navegador, e vira som.
+          </p>
+        </section>
+
+        <section class="panel" id="event-panel" aria-labelledby="event-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="event-title">Carregando evento</h2>
+            <span class="status" id="event-status" data-state="loading"
+              >Consultando</span
+            >
+          </div>
+          <div class="wind">
+            <span class="readout__label">Diâmetro da pluma</span>
+            <span class="wind__value"
+              ><span id="r-diameter">—</span>
+              <span class="wind__unit">km</span></span
+            >
+            <span class="wind__sub mono" id="r-since">—</span>
+          </div>
+          <div class="readouts">
+            <div class="readout">
+              <span class="readout__label">Expansão</span>
+              <span class="readout__value"
+                ><span id="r-expansion">—</span>
+                <span class="readout__unit">km/min</span></span
+              >
+            </div>
+            <div class="readout">
+              <span class="readout__label">Núcleo frio</span>
+              <span class="readout__value" id="r-core">—</span>
+            </div>
+            <div class="readout readout--wide">
+              <span class="readout__label">Onda de pressão (modelo)</span>
+              <span class="readout__value"
+                ><span id="r-wave">—</span>
+                <span class="readout__unit">km percorridos</span></span
+              >
+            </div>
+          </div>
+        </section>
+
+        <section
+          data-tab="ciencia"
+          class="panel"
+          aria-labelledby="science-title"
+        >
+          <div class="panel__head">
+            <h2 class="panel__title" id="science-title">Ciência ao vivo</h2>
+            <button
+              class="info-btn"
+              type="button"
+              data-info-for="science-info"
+              aria-expanded="false"
+              aria-controls="science-info"
+              aria-label="Como calculamos"
+            >
+              i
+            </button>
+          </div>
+          <div class="readouts" id="science"></div>
+          <div class="panel__note info-text" id="science-info" hidden>
+            <p>
+              Área = π·(d/2)², com o diâmetro medido nos quadros do GOES-West. A
+              borda da pluma é a metade da variação do diâmetro entre dois
+              quadros.
+            </p>
+            <p>
+              A onda de pressão (onda de Lamb) é um modelo: parte do vulcão às
+              04:14:45 UTC e viaja a 315 m/s, a velocidade medida no mundo todo
+              (Matoza et al., Science, 2022). A chegada a São Paulo é a
+              distância pelo círculo máximo dividida por essa velocidade. A
+              altura de 57 km é a medida de Proud et al. (Science, 2022).
+            </p>
+          </div>
+        </section>
+      </aside>
+
+      <div class="center"></div>
+
+      <aside class="hud hud--right" id="drawer" aria-label="Detalhes">
+        <section data-tab="musica" class="panel" aria-labelledby="accent-title">
+          <div class="panel__head">
+            <h2 class="panel__title" id="accent-title">Sotaque da música</h2>
+            <button
+              class="info-btn"
+              type="button"
+              data-info-for="accent-info"
+              aria-expanded="false"
+              aria-controls="accent-info"
+              aria-label="Sobre o sotaque da música"
+            >
+              i
+            </button>
+          </div>
+          <div class="segmented" role="group" aria-label="Sotaque da música">
+            <button
+              type="button"
+              data-accent="br"
+              aria-pressed="false"
+              title="Tecla B"
+            >
+              Brasileiro
+            </button>
+            <button
+              type="button"
+              data-accent="universal"
+              aria-pressed="false"
+              title="Tecla B"
+            >
+              Universal
+            </button>
+          </div>
+          <p class="panel__note" id="accent-why"></p>
+          <ul
+            class="band"
+            id="band"
+            aria-label="Instrumentos e o limiar em que cada um entra"
+          ></ul>
+          <div class="panel__note info-text" id="accent-info" hidden>
+            <p>
+              A regra é a mesma nos dois sotaques: a intensidade escolhe a nota
+              e o acorde, a velocidade escolhe o andamento. No sotaque
+              brasileiro, a intensidade também decide quem toca: cada
+              instrumento entra quando o dado cruza um limiar, então dá para
+              ouvir em que faixa o fenômeno está.
+            </p>
+            <p>
+              Os instrumentos são sintetizados no navegador: tambores, ferros e
+              foles são osciladores e ruído, em padrões rítmicos inspirados nos
+              gêneros, e tocados pelos dados. Por baixo toca uma música gravada,
+              feita no Suno, que você escolhe em "Música de fundo" (por padrão,
+              a do gênero), e por cima soam os sons gerados pelo evento; ela
+              segue o andamento dos dados.
+            </p>
+          </div>
+        </section>
+
+        <section data-tab="musica" class="panel">
+          <div class="panel__head">
+            <h2 class="panel__title">Dado para som</h2>
+            <span class="eyebrow" id="map-source">quadros do GOES-West</span>
+          </div>
+          <ul id="mapping"></ul>
+          <canvas
+            class="scope"
+            id="scope"
+            role="img"
+            aria-label="Forma de onda do som gerado"
+          ></canvas>
+        </section>
+
+        <section data-tab="sobre" class="panel">
+          <div class="panel__head">
+            <h2 class="panel__title">Como medimos</h2>
+            <button
+              class="info-btn"
+              type="button"
+              data-info-for="tonga-info"
+              aria-expanded="false"
+              aria-controls="tonga-info"
+              aria-label="Como medimos"
+            >
+              i
+            </button>
+          </div>
+          <div class="panel__note info-text" id="tonga-info" hidden>
+            <p>
+              Para cada horário são baixados dois quadros do GOES-West na GIBS:
+              a cor (GeoColor), que você vê, e o infravermelho (banda 13). No
+              infravermelho, topos de nuvem frios aparecem coloridos; a pluma é
+              a mancha fria ligada ao vulcão, e a área dela dá o diâmetro. Os
+              pixels vermelhos, os mais frios, formam o núcleo.
+            </p>
+            <p>
+              O mesmo infravermelho levanta o relevo da pluma na cena. A onda de
+              pressão é um modelo: parte no momento da explosão (04:14:45 UTC,
+              USGS) a 315 m/s, a velocidade medida mundo afora. Os relâmpagos
+              são ilustrativos.
+            </p>
+          </div>
+        </section>
+      </aside>
+
+      <div class="dock">
+        <div class="panel transport">
+          <button
+            class="btn btn--primary"
+            id="btn-sound"
+            type="button"
+            aria-pressed="false"
+          >
+            <span class="icon icon--sound" aria-hidden="true"></span
+            ><span class="btn__label">Ligar som</span>
+          </button>
+          <button class="btn" id="btn-play" type="button" aria-pressed="false">
+            <span class="icon icon--play" aria-hidden="true"></span
+            ><span class="btn__label">Tocar erupção</span>
+          </button>
+          <div class="transport__track" id="track">
+            <div class="profile" id="profile" aria-hidden="true"></div>
+            <label class="visually-hidden" for="scrub"
+              >Momento da erupção</label
+            >
+            <input
+              class="range"
+              id="scrub"
+              type="range"
+              min="0"
+              max="1000"
+              step="1"
+              value="0"
+            />
+            <div class="transport__ticks" id="ticks" aria-hidden="true"></div>
+          </div>
+          <div
+            class="segmented cameras"
+            id="cameras"
+            role="group"
+            aria-label="Câmera"
+          >
+            <button
+              type="button"
+              data-camera="orbit"
+              aria-pressed="false"
+              title="Tecla 1"
+            >
+              Órbita
+            </button>
+            <button
+              type="button"
+              data-camera="approach"
+              aria-pressed="false"
+              title="Tecla 2"
+            >
+              Aproximação
+            </button>
+            <button
+              type="button"
+              data-camera="horizon"
+              aria-pressed="false"
+              title="Tecla 3"
+            >
+              Horizonte
+            </button>
+          </div>
+          <button
+            class="btn btn--ghost sheet-toggle"
+            id="btn-sheet"
+            type="button"
+            aria-expanded="false"
+            aria-controls="drawer"
+          >
+            <span class="btn__label">Detalhes</span
+            ><span class="sheet-toggle__chevron" aria-hidden="true"></span>
+          </button>
+          <button
+            class="btn btn--ghost"
+            id="btn-hud"
+            type="button"
+            aria-pressed="false"
+            title="Tecla H"
+          >
+            Ocultar painéis
+          </button>
+          <a class="btn btn--ghost dock__home" href="/">Fenômenos</a>
+        </div>
+      </div>
+    </main>
+
+    <section class="intro" id="intro" aria-labelledby="intro-title">
+      <header class="intro-header" aria-label="Cabeçalho do site">
+        <div data-site-header></div>
+      </header>
+      <div class="intro__content">
+        <p class="eyebrow">Earth Jukebox · Vulcão</p>
+        <h1 class="intro__title" id="intro-title">
+          A explosão do <em>Tonga</em>
+        </h1>
+        <p
+          class="intro__rule"
+          id="intro-rule"
+          data-rule="Quanto maior a pluma do vulcão, mais aguda a nota."
+        >
+          Quanto maior a pluma do vulcão, mais aguda a nota.
+        </p>
+        <p class="intro__sub">
+          15 de janeiro de 2022, 03:50 a 08:00 UTC · quadros do satélite
+          GOES-West a cada 10 a 30 minutos
+        </p>
+        <div class="intro__progress" aria-live="polite">
+          <span class="intro__bar"><span id="intro-bar"></span></span>
+          <span class="intro__status mono" id="intro-status"
+            >Carregando imagens do GOES-West</span
+          >
+        </div>
+        <div class="intro__accent">
+          <span class="eyebrow">Sotaque da música</span>
+          <div class="segmented" role="group" aria-label="Sotaque da música">
+            <button type="button" data-accent="br" aria-pressed="false">
+              Brasileiro
+            </button>
+            <button type="button" data-accent="universal" aria-pressed="false">
+              Universal
+            </button>
+          </div>
+        </div>
+        <button
+          class="btn btn--primary intro__start"
+          id="btn-start"
+          type="button"
+          disabled
+        >
+          Assistir à erupção
+        </button>
+        <p class="intro__hint">Use fones de ouvido.</p>
+        <dl class="keys">
+          <div>
+            <dt><kbd>Espaço</kbd></dt>
+            <dd>tocar ou pausar</dd>
+          </div>
+          <div>
+            <dt><kbd>←</kbd><kbd>→</kbd></dt>
+            <dd>10 minutos</dd>
+          </div>
+          <div>
+            <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt>
+            <dd>câmeras</dd>
+          </div>
+          <div>
+            <dt><kbd>H</kbd></dt>
+            <dd>painéis</dd>
+          </div>
+          <div>
+            <dt><kbd>M</kbd></dt>
+            <dd>som</dd>
+          </div>
+          <div>
+            <dt><kbd>B</kbd></dt>
+            <dd>sotaque</dd>
+          </div>
+          <div>
+            <dt><kbd>N</kbd></dt>
+            <dd>narração</dd>
+          </div>
+        </dl>
+      </div>
+      <footer class="site-footer intro-footer">
+        <div>
+          <p>Projeto desenvolvido pelo time ENTERPRISE para o NASA Space Apps 2026.</p>
+          <a href="/docs.html">Leia a documentação técnica ↗</a>
+        </div>
+        <a class="back-top" href="#top" aria-label="Voltar ao topo"
+          >↑<span>Volte ao topo</span></a
+        >
+      </footer>
+    </section>
+
+    <a
+      class="phenomena-back"
+      href="/tonga.html"
+      aria-label="Voltar à introdução de Tonga"
+    >
+      <span aria-hidden="true">←</span> Tonga
+    </a>
+
+    <script type="module" src="/src/main/tonga.js"></script>
+    <script type="module" src="/src/components/site-header.js"></script>
+  </body>
+</html>

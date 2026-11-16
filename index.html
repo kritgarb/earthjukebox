@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#091127" />
+    <meta
+      name="description"
+      content="Ouça fenômenos reais da Terra através de dados da NASA transformados em música e experiências acessíveis."
+    />
+    <title>Earth Jukebox · Ouça a Terra</title>
+    <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/accessibility.css" />
+    <script type="module" src="/src/main/home.js"></script>
+  </head>
+
+  <body class="page-home bg-deep-space font-head">
+    <a class="skip" href="#top">Pular para o conteúdo</a>
+    <main
+      class="mx-auto max-w-[1600px] px-page py-10 text-ink max-[520px]:pt-16 max-[520px]:pb-[22px]"
+      id="top"
+      tabindex="-1"
+    >
+      <div data-site-header></div>
+      <section
+        class="relative mt-6 grid min-h-[300px] grid-cols-[minmax(0,1fr)_clamp(96px,22vw,340px)] items-center gap-[clamp(12px,3vw,48px)] py-[clamp(24px,5vw,56px)] max-[520px]:grid-cols-1"
+        aria-labelledby="home-title"
+      >
+        <div>
+          <p
+            class="mb-3 text-[clamp(18px,2.6vw,32px)] font-bold tracking-[0.035em] text-fog-2"
+          >
+            Earth Jukebox
+          </p>
+          <h1
+            id="home-title"
+            class="max-w-[797px] text-[clamp(34px,6.2vw,88px)] leading-[1] tracking-[-0.035em] text-balance"
+          >
+            Ouça a Terra com
+            <span class="text-brand-yellow">sotaque brasileiro</span>
+          </h1>
+          <p
+            class="mt-6 max-w-[60ch] text-[clamp(16px,1.6vw,24px)] leading-[1.5] text-white font-prose"
+          >
+            Transformamos visualizações científicas da Terra da NASA em
+            paisagens sonoras acessíveis e imersivas. Conectamos dados complexos
+            à percepção humana através do som e da arte.
+          </p>
+          <a
+            class="mt-[clamp(24px,3vw,40px)] inline-flex min-h-12 items-center gap-4 rounded-full bg-brand-green px-[clamp(20px,3.5vw,56px)] py-[clamp(12px,1.3vw,18px)] text-[clamp(16px,1.6vw,24px)] font-bold text-deep-space! no-underline transition hover:brightness-110"
+            href="#fenomenos"
+            >Ouvir jukebox agora</a
+          >
+        </div>
+
+        <div
+          class="w-full justify-self-center max-[520px]:hidden"
+          aria-hidden="true"
+        >
+          <img
+            class="block h-auto w-full object-contain"
+            src="/img/logo/symbol_logo.webp"
+            alt="Simbolo do Earth Jukebox, um globo estilizado com ondas sonoras"
+            width="400"
+          />
+        </div>
+      </section>
+
+      <a
+        class="my-[clamp(48px,7vw,96px)] flex min-h-[96px] items-center justify-between gap-5 rounded-2xl bg-navy-900 px-[clamp(20px,2.4vw,32px)] py-[clamp(20px,2vw,28px)] no-underline max-[640px]:flex-col max-[640px]:items-start"
+        href="#fenomenos"
+      >
+        <span class="grid gap-3">
+          <strong
+            class="text-[clamp(20px,2.2vw,28px)] font-bold leading-tight text-white"
+          >
+            Uma Terra para todos os sentidos
+          </strong>
+          <small
+            class="text-base font-normal leading-[1.45] text-fog"
+          >
+            Ouça uma introdução antes de explorar. A experiência começa sem som
+            automático.
+          </small>
+          <small class="text-sm text-fog-2">
+            Tab: navegar&nbsp; · &nbsp;Enter: ativar&nbsp; · &nbsp;Descrições
+            textuais disponíveis nas experiências
+          </small>
+        </span>
+        <span
+          class="flex min-h-12 flex-none items-center self-end rounded-full bg-brand-green px-5 text-base font-semibold text-deep-space max-[640px]:self-stretch max-[640px]:justify-center"
+          >Ouvir introdução</span
+        >
+      </a>
+
+      <section
+        class="mt-section"
+        id="sobre"
+        aria-labelledby="about-title"
+      >
+        <div class="max-w-[1100px] py-6">
+          <p
+            class="pb-4 text-[clamp(16px,1.6vw,22px)] font-bold text-fog font-prose"
+            id="about-title"
+          >
+            Sobre a ferramenta "Earth Jukebox"
+          </p>
+          <p
+            class="text-[clamp(18px,2.1vw,30px)] font-medium leading-[1.6] tracking-[-0.01em] text-white text-pretty"
+          >
+            As visualizações científicas da NASA são
+            <span class="underline underline-offset-4"
+              >predominantemente visuais</span
+            >. Isso cria uma barreira de
+            <span class="underline underline-offset-4"
+              >acessibilidade para milhões de pessoas cegas ou com baixa
+              visão</span
+            >, além de limitar a forma como o público se conecta emocionalmente
+            com as mudanças do nosso planeta.
+          </p>
+        </div>
+
+        <div
+          class="mt-[clamp(24px,4vw,48px)] rounded-2xl border-b-4 border-brand-blue bg-navy-800 px-[clamp(20px,4vw,64px)] py-[clamp(28px,5vw,64px)]"
+        >
+          <p class="text-[clamp(18px,1.8vw,24px)] font-bold text-brand-blue-100 font-prose">A Solução</p>
+          <p
+            class="max-w-[60ch] pt-4 text-[clamp(18px,2.2vw,32px)] leading-[1.45] text-white text-pretty"
+          >
+            Acreditamos que a ciência da Terra deve ser sentida por todos os
+            sentidos. A sonificação transforma dados crus em narrativas
+            auditivas emocionantes, revelando padrões ocultos que os olhos
+            humanos podem deixar passar.
+          </p>
+        </div>
+      </section>
+
+      <section
+        class="mt-section text-center"
+        id="como-funciona"
+        aria-labelledby="how-title"
+      >
+        <h2
+          id="how-title"
+          class="mx-auto mb-16 max-w-[22ch] text-[clamp(26px,3.2vw,44px)] leading-[1.15] text-balance"
+        >
+          Da Imagem ao Som:<br />Como a Ciência Vira Música?
+        </h2>
+        <ol
+          class="grid grid-cols-3 gap-x-[clamp(32px,6vw,96px)] gap-y-10 text-left max-[1000px]:grid-cols-1 max-[1000px]:gap-y-8"
+        >
+          <li
+            class="grid content-start gap-2 max-[1000px]:grid-cols-[56px_1fr] max-[1000px]:gap-x-4 max-[1000px]:gap-y-1"
+          >
+            <span
+              class="mb-4 grid h-[clamp(52px,5vw,74px)] w-[clamp(52px,5vw,74px)] place-items-center rounded-full bg-white font-head text-[clamp(20px,2.1vw,32px)] font-bold text-deep-space max-[1000px]:row-span-2 max-[1000px]:mb-0 max-[1000px]:h-14 max-[1000px]:w-14"
+              >01</span
+            >
+            <h3
+              class="mb-2 text-[clamp(16px,1.7vw,24px)] leading-[1.3] max-[1000px]:mb-0 max-[1000px]:self-end"
+            >
+              Extração de dados visuais
+            </h3>
+            <p class="text-[clamp(16px,1.5vw,20px)] leading-[1.6] text-fog max-[1000px]:col-start-2">
+              O sistema mede imagens de satélite da NASA (GIBS e quadros do Earth
+              Information Center), lendo pixels, brilho, cores e coordenadas do
+              mapa em tempo real.
+            </p>
+          </li>
+          <li
+            class="grid content-start gap-2 max-[1000px]:grid-cols-[56px_1fr] max-[1000px]:gap-x-4 max-[1000px]:gap-y-1"
+          >
+            <span
+              class="mb-4 grid h-[clamp(52px,5vw,74px)] w-[clamp(52px,5vw,74px)] place-items-center rounded-full bg-white font-head text-[clamp(20px,2.1vw,32px)] font-bold text-deep-space max-[1000px]:row-span-2 max-[1000px]:mb-0 max-[1000px]:h-14 max-[1000px]:w-14"
+              >02</span
+            >
+            <h3
+              class="mb-2 text-[clamp(16px,1.7vw,24px)] leading-[1.3] max-[1000px]:mb-0 max-[1000px]:self-end"
+            >
+              Síntese musical e áudio espacial
+            </h3>
+            <p class="text-[clamp(16px,1.5vw,20px)] leading-[1.6] text-fog max-[1000px]:col-start-2">
+              Através da Web Audio API, os dados brutos são traduzidos em notas
+              musicais harmoniosas e posicionadas em 3D (áudio binaural),
+              tornando a ciência acessível à escuta.
+            </p>
+          </li>
+          <li
+            id="acessibilidade"
+            class="grid content-start gap-2 max-[1000px]:grid-cols-[56px_1fr] max-[1000px]:gap-x-4 max-[1000px]:gap-y-1"
+          >
+            <span
+              class="mb-4 grid h-[clamp(52px,5vw,74px)] w-[clamp(52px,5vw,74px)] place-items-center rounded-full bg-white font-head text-[clamp(20px,2.1vw,32px)] font-bold text-deep-space max-[1000px]:row-span-2 max-[1000px]:mb-0 max-[1000px]:h-14 max-[1000px]:w-14"
+              >03</span
+            >
+            <h3
+              class="mb-2 text-[clamp(16px,1.7vw,24px)] leading-[1.3] max-[1000px]:mb-0 max-[1000px]:self-end"
+            >
+              Design inclusivo
+            </h3>
+            <p class="text-[clamp(16px,1.5vw,20px)] leading-[1.6] text-fog max-[1000px]:col-start-2">
+              Projetado desde o início para ser compreendido sem o uso da visão,
+              com teclado, descrições textuais e narração.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section
+        class="mt-section"
+        id="fenomenos"
+        aria-labelledby="phenomena-title"
+      >
+        <div
+          class="mb-4 flex items-end justify-between gap-5"
+        >
+          <h2
+            id="phenomena-title"
+            class="text-[clamp(26px,3.2vw,44px)] leading-[1.15] text-white"
+          >
+            Escolha um fenômeno
+          </h2>
+        </div>
+        <p class="mb-10 max-w-[80ch] font-prose text-[clamp(14px,1.3vw,16px)] leading-[1.6] text-fog" id="eic-home-legend"></p>
+        <div class="mb-8 mt-12 flex flex-wrap items-end justify-between gap-x-8 gap-y-4 first:mt-0">
+          <div>
+          <h3 class="font-head text-[clamp(20px,2.2vw,30px)] font-bold leading-[1.2] text-white" id="group-eic">Quadros do Earth Information Center</h3>
+          <p class="mt-2 max-w-[70ch] font-prose text-[clamp(15px,1.4vw,18px)] leading-[1.6] text-fog">Visualizações da NASA que o desafio recomenda, medidas pixel a pixel no navegador.</p>
+          </div>
+          <div data-carousel-controls></div>
+        </div>
+        <ul id="eic-cards"
+          class="grid grid-cols-2 gap-[clamp(20px,3.2vw,48px)] max-[700px]:grid-cols-1"
+        >
+          <li>
+            <a
+              class="flex h-full flex-col font-prose min-[1181px]:min-h-[655px] rounded-card bg-brand-blue-100 p-[10px] text-night-ink no-underline transition [transition-property:transform,box-shadow] hover:-translate-y-1 hover:shadow-[0_12px_32px_#0005] focus-visible:-translate-y-1 focus-visible:shadow-[0_12px_32px_#0005] max-[640px]:min-h-0"
+              href="/nightlights.html"
+            >
+              <span
+                class="mb-[10px] block aspect-[1.45] overflow-hidden rounded-card-media bg-navy-900 max-[640px]:aspect-[1.8]"
+              >
+                <img
+                  class="block h-full w-full object-cover"
+                  src="/img/cards/nightlights.webp"
+                  alt="Mapa das luzes noturnas da Terra: cidades acesas na Europa e na Ásia"
+                  loading="lazy"
+                />
+              </span>
+              <span
+                class="mt-4 mb-[7px] inline-block self-start rounded-full bg-navy-900 px-3 py-[5px] text-[12.5px] font-bold text-brand-blue-100"
+                >Cidades</span
+              >
+              <span
+                class="font-head text-[36px] font-bold leading-[1.1] text-deep-space"
+                >Luzes da noite</span
+              >
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space"
+                >2012 a 2023 · o planeta visto à noite</span
+              >
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space"
+                ><b class="font-mono">0,31 → 0,45 %</b> do mapa aceso em onze
+                anos</span
+              >
+              <span
+                class="mt-[7px] border-b border-dashed border-[#10172970] py-[7px] text-sm leading-[1.5] text-deep-space"
+              >
+                A área acesa medida nos quadros da NASA escolhe a nota. Uma
+                linha varre o mapa e cada lugar aceso vira um sino.
+              </span>
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space">
+                <strong>Samba</strong> · cada limiar de luz traz mais um
+                instrumento da roda
+              </span>
+              <span class="mb-4 mt-[7px] text-sm leading-[1.5] text-deep-space"
+                >Earth Information Center (SVS 5313) · Black Marble</span
+              >
+              <span
+                class="mt-auto flex w-fit items-center justify-between gap-4 self-start rounded-full bg-navy-900 px-[26px] py-[13px] text-[15px] font-bold text-white"
+                >Entrar <span aria-hidden="true">→</span></span
+              >
+            </a>
+          </li>
+        </ul>
+        <div class="mb-8 mt-12 flex flex-wrap items-end justify-between gap-x-8 gap-y-4 first:mt-0">
+          <div>
+          <h3 class="font-head text-[clamp(20px,2.2vw,30px)] font-bold leading-[1.2] text-white" id="group-events">Eventos medidos pela EONET e pela GIBS</h3>
+          <p class="mt-2 max-w-[70ch] font-prose text-[clamp(15px,1.4vw,18px)] leading-[1.6] text-fog">Furacão e vulcão reais, com trajetória, vento e imagens de satélite da NASA e da NOAA.</p>
+          </div>
+          <div data-carousel-controls></div>
+        </div>
+        <ul
+          id="event-cards"
+          class="grid grid-cols-2 gap-[clamp(20px,3.2vw,48px)] max-[700px]:grid-cols-1"
+        >
+          <li>
+            <a
+              class="flex h-full flex-col font-prose min-[1181px]:min-h-[655px] rounded-card bg-brand-yellow p-[10px] text-night-ink no-underline transition [transition-property:transform,box-shadow] hover:-translate-y-1 hover:shadow-[0_12px_32px_#0005] focus-visible:-translate-y-1 focus-visible:shadow-[0_12px_32px_#0005] max-[640px]:min-h-0"
+              href="/helene.html"
+            >
+              <span
+                class="mb-[10px] block aspect-[1.45] overflow-hidden rounded-card-media bg-navy-900 max-[640px]:aspect-[1.8]"
+              >
+                <img
+                  class="block h-full w-full object-cover"
+                  src="/img/cards/helene.webp"
+                  alt="Furacão Helene visto do espaço, com nuvens em espiral"
+                  loading="lazy"
+                />
+              </span>
+              <span
+                class="mt-4 mb-[7px] inline-block self-start rounded-full bg-navy-900 px-3 py-[5px] text-[12.5px] font-bold text-brand-yellow"
+                >Furacão</span
+              >
+              <span
+                class="font-head text-[36px] font-bold text-deep-space leading-[1.1]"
+                >Dentro do Helene</span
+              >
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space"
+                >24 a 28 de setembro de 2024 · Golfo do México</span
+              >
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space"
+                ><b class="font-mono">40 → 120 kt</b> de vento em quatro
+                dias</span
+              >
+              <span
+                class="mt-[7px] border-b border-dashed border-[#10172970] py-[7px] text-sm leading-[1.5] text-deep-space"
+              >
+                O vento medido escolhe a nota e o ritmo. Os relâmpagos da cena
+                são ilustrativos e soam como sinos no acorde.
+              </span>
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space">
+                <strong>Baião</strong> · cada categoria Saffir-Simpson traz um
+                instrumento do trio de forró
+              </span>
+              <span class="mb-4 mt-[7px] text-sm leading-[1.5] text-deep-space"
+                >EONET · GIBS (NOAA-20, Aqua, Terra)</span
+              >
+              <span
+                class="mt-auto flex w-fit items-center justify-between gap-4 self-start rounded-full bg-navy-900 px-[26px] py-[13px] text-[15px] font-bold leading-normal text-white"
+                >Entrar</span
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              class="flex h-full flex-col font-prose min-[1181px]:min-h-[655px] rounded-card bg-card-blue p-[10px] text-night-ink no-underline transition [transition-property:transform,box-shadow] hover:-translate-y-1 hover:shadow-[0_12px_32px_#0005] focus-visible:-translate-y-1 focus-visible:shadow-[0_12px_32px_#0005] max-[640px]:min-h-0"
+              href="/tonga.html"
+            >
+              <span
+                class="mb-[10px] block aspect-[1.45] overflow-hidden rounded-card-media bg-navy-900 max-[640px]:aspect-[1.8]"
+              >
+                <img
+                  class="block h-full w-full object-cover"
+                  src="/img/cards/tonga.webp"
+                  alt="Pluma da erupção de Hunga Tonga vista por satélite"
+                  loading="lazy"
+                />
+              </span>
+              <span
+                class="mt-4 mb-[7px] inline-block self-start rounded-full bg-navy-900 px-3 py-[5px] text-[12.5px] font-bold text-card-blue"
+                >Vulcão</span
+              >
+              <span
+                class="font-head text-[36px] font-bold leading-[1.1] text-deep-space"
+                >A explosão do Tonga</span
+              >
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space"
+                >15 de janeiro de 2022 · Pacífico Sul</span
+              >
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space"
+                ><b class="font-mono">0 → 735 km</b> de pluma em quatro
+                horas</span
+              >
+              <span
+                class="mt-[7px] border-b border-dashed border-[#10172970] py-[7px] text-sm leading-[1.5] text-deep-space"
+              >
+                A expansão da pluma e a explosão são traduzidas em ritmo, nota e
+                acorde.
+              </span>
+              <span class="mt-[7px] text-sm leading-[1.5] text-deep-space">
+                <strong>Maracatu</strong> · o gonguê espera a explosão; a pluma
+                traz as alfaias do baque virado
+              </span>
+              <span class="mb-4 mt-[7px] text-sm leading-[1.5] text-deep-space"
+                >GIBS (GOES-West) · USGS</span
+              >
+              <span
+                class="mt-auto flex w-fit items-center justify-between gap-4 self-start rounded-full bg-navy-900 px-[26px] py-[13px] text-[15px] font-bold text-white"
+                >Entrar <span aria-hidden="true">→</span></span
+              >
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="mt-section" id="time" aria-labelledby="team-title">
+        <h2 id="team-title" class="mb-16 text-center font-head text-[clamp(32px,3.4vw,48px)] font-bold leading-[1.5] text-white">
+          <span>Conheça o</span> <span class="text-brand-yellow">time</span>
+        </h2>
+        <ul class="flex flex-wrap justify-center gap-x-6 gap-y-10 min-[640px]:gap-x-[clamp(16px,3vw,64px)] min-[640px]:gap-y-12">
+          <li class="grid w-[calc(50%-12px)] min-[640px]:w-[clamp(120px,14vw,192px)] content-start justify-items-center gap-4 text-center">
+            <img class="h-[clamp(88px,10vw,128px)] w-[clamp(88px,10vw,128px)] rounded-full object-cover" src="/img/team/isabela.webp" alt="" width="128" height="128" loading="lazy" />
+            <span class="grid font-prose"><span class="text-[clamp(16px,1.7vw,24px)] font-medium leading-normal text-white">Isabela Guedes</span><span class="text-[clamp(14px,1.4vw,20px)] font-medium leading-normal text-fog">Designer UX/UI</span></span>
+          </li>
+          <li class="grid w-[calc(50%-12px)] min-[640px]:w-[clamp(120px,14vw,192px)] content-start justify-items-center gap-4 text-center">
+            <img class="h-[clamp(88px,10vw,128px)] w-[clamp(88px,10vw,128px)] rounded-full object-cover" src="/img/team/vitoria.webp" alt="" width="128" height="128" loading="lazy" />
+            <span class="grid font-prose"><span class="text-[clamp(16px,1.7vw,24px)] font-medium leading-normal text-white">Vitória Ferreira</span><span class="text-[clamp(14px,1.4vw,20px)] font-medium leading-normal text-fog">Tech Lead e QA</span></span>
+          </li>
+          <li class="grid w-[calc(50%-12px)] min-[640px]:w-[clamp(120px,14vw,192px)] content-start justify-items-center gap-4 text-center">
+            <img class="h-[clamp(88px,10vw,128px)] w-[clamp(88px,10vw,128px)] rounded-full object-cover" src="/img/team/benjamin.webp" alt="" width="128" height="128" loading="lazy" />
+            <span class="grid font-prose"><span class="text-[clamp(16px,1.7vw,24px)] font-medium leading-normal text-white">Benjamin Vieira</span><span class="text-[clamp(14px,1.4vw,20px)] font-medium leading-normal text-fog">Desenvolvedor de software</span></span>
+          </li>
+          <li class="grid w-[calc(50%-12px)] min-[640px]:w-[clamp(120px,14vw,192px)] content-start justify-items-center gap-4 text-center">
+            <img class="h-[clamp(88px,10vw,128px)] w-[clamp(88px,10vw,128px)] rounded-full object-cover" src="/img/team/gabriel.webp" alt="" width="128" height="128" loading="lazy" />
+            <span class="grid font-prose"><span class="text-[clamp(16px,1.7vw,24px)] font-medium leading-normal text-white">Gabriel Batista</span><span class="text-[clamp(14px,1.4vw,20px)] font-medium leading-normal text-fog">Designer ID</span></span>
+          </li>
+          <li class="grid w-[calc(50%-12px)] min-[640px]:w-[clamp(120px,14vw,192px)] content-start justify-items-center gap-4 text-center">
+            <img class="h-[clamp(88px,10vw,128px)] w-[clamp(88px,10vw,128px)] rounded-full object-cover" src="/img/team/maria.webp" alt="" width="128" height="128" loading="lazy" />
+            <span class="grid font-prose"><span class="text-[clamp(16px,1.7vw,24px)] font-medium leading-normal text-white">Maria Matos</span><span class="text-[clamp(14px,1.4vw,20px)] font-medium leading-normal text-fog">Desenvolvedora de software</span></span>
+          </li>
+        </ul>
+      </section>
+    </main>
+    <footer class="mt-[clamp(24px,4vw,64px)] border-t border-steel text-fog">
+      <div class="mx-auto flex max-w-[1600px] items-center justify-between gap-6 px-page py-[clamp(24px,3vw,40px)] max-[560px]:flex-col max-[560px]:items-start">
+        <div class="flex items-center gap-[clamp(16px,2vw,28px)]">
+          <img class="h-[clamp(44px,5vw,64px)] w-auto flex-none" src="/img/logo/nasa-space-apps.png" alt="NASA International Space Apps Challenge" width="64" height="63" />
+          <div class="grid gap-1 font-prose text-[clamp(14px,1.4vw,18px)]">
+            <p class="font-medium">Projeto desenvolvido pelo time ENTERPRISE para o NASA Space Apps 2026.</p>
+            <a class="inline-block py-2.5 font-bold text-frost underline underline-offset-4 hover:text-brand-yellow" href="/docs.html">Leia a documentação técnica <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <a class="grid flex-none justify-items-center gap-2 max-[560px]:grid-flow-col max-[560px]:items-center max-[560px]:gap-3 font-prose text-sm font-medium text-mist no-underline hover:text-brand-yellow" href="#top" aria-label="Voltar ao topo">
+          <span class="flex h-11 w-11 items-center justify-center rounded-full border-2 border-current text-2xl font-normal" aria-hidden="true">↑</span>
+          Volte ao topo:
+        </a>
+      </div>
+    </footer>
+    <script type="module" src="/src/components/site-header.js"></script>
+  </body>
+</html>
