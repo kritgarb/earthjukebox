@@ -27,6 +27,12 @@ NASA Space Apps Challenge 2026 · Challenge 14 "Earth Jukebox" · Enterprise tra
 
 > 🎧 **Best experienced with headphones.** Browsers only unlock audio after a gesture, so every experience starts with a tap.
 
+<div align="center">
+
+[![Watch the demo on YouTube](https://img.shields.io/badge/%E2%96%B6%20Watch%20the%20demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/BbSlhq3Ng_s)
+
+</div>
+
 ---
 
 ## Contents
